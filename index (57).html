@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Micros · Visita del Papa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g:#1a7a56;--gl:#e8f5ef;--gm:#2d9e6e;
+  --a:#d4820a;--al:#fef3dc;
+  --b:#1a5fa8;--bl:#e8f0fc;
+  --r:#b83232;--rl:#fdecea;
+  --g1:#f7f8f7;--g2:#efefef;--g3:#c8ccc8;--g4:#888f88;
+  --t:#1a1f1a;--s:#5a635a;--w:#fff;
+  --rr:14px;--rs:8px;--sh:0 2px 16px rgba(0,0,0,.07);
+  --ev:#1a5fa8;--evl:#e8f0fc;
+}
+body[data-ev="misa"]{--ev:#1a5fa8;--evl:#e8f0fc}
+body[data-ev="jovenes"]{--ev:#c2410c;--evl:#fdeee4}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--g1);min-height:100vh;color:var(--t);font-size:15px;line-height:1.5}
+.page{display:none!important}.page.active{display:block!important}
+.page.center.active{display:flex!important}
+.center{min-height:100vh;align-items:center;justify-content:center;padding:1.5rem}
+.serif{font-family:'DM Serif Display',serif}
+button{font-family:'DM Sans',sans-serif}
+
+/* Shared */
+.ig{margin-bottom:.85rem}
+.ig label{display:block;font-size:.78rem;font-weight:600;color:var(--s);margin-bottom:.3rem;letter-spacing:.02em}
+.ig input,.ig select,.ig textarea{width:100%;padding:10px 13px;border:1.5px solid var(--g2);border-radius:var(--rs);font-size:.92rem;font-family:'DM Sans',sans-serif;color:var(--t);background:var(--w);outline:none;transition:border-color .15s}
+.ig input:focus,.ig select:focus,.ig textarea:focus{border-color:var(--gm)}
+.bp{display:block;width:100%;padding:12px;background:var(--g);color:#fff;border:none;border-radius:var(--rs);font-size:.92rem;font-weight:600;cursor:pointer;text-align:center;transition:background .15s,transform .1s;margin-top:.25rem}
+.bp:hover{background:var(--gm)}.bp:active{transform:scale(.98)}
+.bp:disabled{background:var(--g3);cursor:not-allowed}
+.bs{display:block;width:100%;padding:10px;background:transparent;color:var(--g);border:1.5px solid var(--gl);border-radius:var(--rs);font-size:.88rem;font-weight:600;cursor:pointer;text-align:center;margin-top:.5rem;transition:background .15s}
+.bs:hover{background:var(--gl)}
+.bsm{padding:5px 12px;font-size:.76rem;width:auto;display:inline-block;margin-top:0}
+.bgr{display:inline-flex;align-items:center;padding:8px 16px;background:var(--g2);color:var(--s);border:none;border-radius:var(--rs);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s}
+.bgr:hover{background:var(--g3)}
+.brd{display:inline-flex;align-items:center;padding:8px 16px;background:var(--rl);color:var(--r);border:1.5px solid #f5c0c0;border-radius:var(--rs);font-size:.82rem;font-weight:700;cursor:pointer}
+.brd:hover{background:#fbd0ce}
+.err{font-size:.78rem;color:var(--r);margin-top:.5rem;text-align:center;min-height:1em}
+.spin{display:inline-block;width:24px;height:24px;border:2.5px solid var(--g2);border-top-color:var(--g);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load{text-align:center;padding:2.5rem 1rem;color:var(--g4);display:flex;flex-direction:column;align-items:center;gap:.6rem;font-size:.85rem}
+.chip{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.66rem;font-weight:700;white-space:nowrap;border:1px solid transparent}
+.c-pagado,.c-completo{background:var(--gl);color:var(--g);border-color:#b8e0cc}
+.c-en_revision{background:var(--al);color:var(--a);border-color:#f0c060}
+.c-rechazado{background:var(--rl);color:var(--r);border-color:#f5c0c0}
+.c-sin_pago,.c-sin_pagos{background:var(--g2);color:var(--s)}
+.c-parcial{background:var(--bl);color:var(--b);border-color:#c5d8f3}
+.c-sin_cargo{background:var(--bl);color:var(--b)}
+.c-baja{background:var(--g2);color:var(--g4);text-decoration:line-through}
+.mbox{padding:.75rem .9rem;border-radius:var(--rs);font-size:.8rem;margin-top:.65rem;display:none}
+.mok{background:var(--gl);color:var(--g)}.mer{background:var(--rl);color:var(--r)}
+.demo-banner{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);background:var(--t);color:#fff;font-size:.7rem;font-weight:600;padding:5px 12px;border-radius:20px;z-index:300;opacity:.85;pointer-events:none;white-space:nowrap}
+
+/* Portal: elegir evento */
+.pcard{background:var(--w);border-radius:20px;padding:2.3rem 2rem;max-width:440px;width:100%;box-shadow:var(--sh);border:1px solid var(--g2)}
+.kicker{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--s);margin-bottom:.5rem}
+.ptitle{font-family:'DM Serif Display',serif;font-size:1.9rem;line-height:1.12;margin-bottom:.45rem}
+.psub{font-size:.85rem;color:var(--s);margin-bottom:1.4rem;line-height:1.5}
+.evcard{display:flex;align-items:center;gap:.9rem;width:100%;text-align:left;padding:1rem 1.05rem;border:1.5px solid var(--g2);border-radius:var(--rr);background:var(--w);cursor:pointer;margin-bottom:.6rem;transition:border-color .15s,background .15s,transform .1s}
+.evcard:hover{transform:translateY(-1px)}
+.evcard:active{transform:scale(.99)}
+.evcard.misa:hover{border-color:#1a5fa8;background:#f5f9ff}
+.evcard.jovenes:hover{border-color:#c2410c;background:#fffaf6}
+.evic{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;flex-shrink:0}
+.evcard.misa .evic{background:#e8f0fc}
+.evcard.jovenes .evic{background:#fdeee4}
+.evn{font-weight:700;font-size:.95rem;line-height:1.25}
+.evd{font-size:.74rem;color:var(--s);margin-top:.12rem}
+.evarr{margin-left:auto;color:var(--g3);font-size:1.1rem}
+.pfoot{margin-top:1.3rem;text-align:center}
+.pfoot a{font-size:.7rem;color:var(--g3);text-decoration:none}
+.evtag{display:inline-flex;align-items:center;gap:.35rem;padding:3px 10px;border-radius:20px;background:var(--evl);color:var(--ev);font-size:.7rem;font-weight:700;margin-bottom:.9rem}
+
+/* Portal: grupo */
+#pg{padding:1rem;padding-bottom:2.5rem}
+.gwrap{max-width:540px;margin:0 auto}
+.gtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:.65rem;gap:.5rem}
+.card{background:var(--w);border-radius:var(--rr);padding:1.1rem 1.2rem;margin-bottom:.65rem;box-shadow:var(--sh);border:1px solid var(--g2)}
+.hcard{display:flex;align-items:center;gap:.9rem;border-top:3px solid var(--ev)}
+.av{width:44px;height:44px;border-radius:50%;background:var(--ev);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.92rem;font-weight:700;flex-shrink:0}
+.hname{font-weight:700;font-size:.95rem;line-height:1.25}
+.hsub{font-size:.72rem;color:var(--s);margin-top:.1rem}
+.plbl{font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--s);margin-bottom:.6rem}
+.pbar{height:7px;background:var(--g2);border-radius:4px;overflow:hidden;margin-bottom:.45rem;display:flex}
+.pbar>div{height:100%;transition:width .4s}
+.pleg{display:flex;gap:.9rem;flex-wrap:wrap;font-size:.7rem;color:var(--s)}
+.pleg b{font-weight:700}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.acc{background:var(--gl);border-radius:var(--rs);padding:.95rem 1rem}
+.acc-row{display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:.38rem 0;border-bottom:1px dashed #b8e0cc}
+.acc-row:last-of-type{border-bottom:none}
+.acc-k{font-size:.66rem;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.06em}
+.acc-v{font-family:ui-monospace,Menlo,monospace;font-size:.95rem;font-weight:700;color:var(--g);word-break:break-all}
+.acc-v.sm{font-family:'DM Sans',sans-serif;font-size:.85rem}
+.copy{border:1.5px solid #b8e0cc;background:var(--w);color:var(--g);border-radius:6px;font-size:.68rem;font-weight:700;padding:4px 9px;cursor:pointer;flex-shrink:0}
+.copy.ok{background:var(--g);color:#fff;border-color:var(--g)}
+.acc-hint{font-size:.72rem;color:var(--g);margin-top:.55rem;line-height:1.45}
+.prow{display:flex;align-items:center;gap:.7rem;padding:.7rem .85rem;border:1.5px solid var(--g2);border-radius:var(--rs);margin-bottom:.45rem;transition:border-color .15s,background .15s;user-select:none}
+.prow.pick{cursor:pointer}
+.prow.pick:hover{border-color:var(--gm);background:var(--gl)}
+.prow.sel{border-color:var(--g);background:var(--gl)}
+.prow input{width:17px;height:17px;accent-color:var(--g);flex-shrink:0}
+.prow .pi{flex:1;min-width:0}
+.prow .pn{font-size:.86rem;font-weight:600}
+.prow .pd{font-size:.7rem;color:var(--s)}
+.prow .pmot{font-size:.7rem;color:var(--r);margin-top:.15rem}
+.prow.done{background:var(--g1)}
+.ig label.prow{display:flex;font-size:inherit;color:inherit;letter-spacing:0;margin-bottom:.45rem}
+.prow .lock{width:17px;text-align:center;font-size:.8rem;flex-shrink:0;color:var(--g4)}
+.selall{font-size:.72rem;font-weight:700;color:var(--g);background:none;border:none;cursor:pointer;padding:0}
+.ctotal{background:var(--g2);border-radius:var(--rs);padding:.7rem .9rem;margin:.4rem 0 .9rem;display:flex;justify-content:space-between;align-items:center}
+.ctotal-l{font-size:.8rem;color:var(--s);font-weight:600}
+.ctotal-v{font-size:1rem;font-weight:700;color:var(--g)}
+.fwrap{border:1.5px dashed var(--g3);border-radius:var(--rs);padding:1.1rem;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;position:relative}
+.fwrap:hover{border-color:var(--gm);background:var(--gl)}
+.fwrap input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.fwrap .fi{font-size:1.3rem;margin-bottom:.3rem}
+.fwrap .ft{font-size:.78rem;color:var(--s)}
+.fname{font-size:.75rem;color:var(--g);margin-top:.4rem;font-weight:600}
+.note{font-size:.72rem;color:var(--s);line-height:1.5;margin-top:.6rem}
+.okbanner{background:var(--gl);border:1px solid #b8e0cc;color:var(--g);border-radius:var(--rs);padding:.8rem 1rem;font-size:.84rem;font-weight:600;display:flex;gap:.5rem;align-items:center}
+.abanner{background:var(--al);border:1px solid #f0c060;border-radius:var(--rs);padding:.7rem 1rem;font-size:.78rem;color:var(--a);margin-bottom:.65rem}
+
+/* Admin */
+#pa{padding:1.1rem;padding-bottom:3rem}
+.awrap{max-width:1040px;margin:0 auto}
+.ahead{display:flex;justify-content:space-between;align-items:center;margin-bottom:.9rem;gap:1rem;flex-wrap:wrap}
+.atitle{font-family:'DM Serif Display',serif;font-size:1.45rem}
+.ahead-r{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.role{background:var(--g2);color:var(--s);padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:700}
+.evsw{display:inline-flex;background:var(--w);border:1.5px solid var(--g2);border-radius:12px;padding:3px;gap:3px;margin-bottom:.9rem}
+.evsw button{border:none;background:none;padding:8px 16px;border-radius:9px;font-size:.84rem;font-weight:700;color:var(--s);cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:background .15s,color .15s}
+.evsw button.on.misa{background:#1a5fa8;color:#fff}
+.evsw button.on.jovenes{background:#c2410c;color:#fff}
+.evsw .cnt{font-size:.66rem;background:rgba(0,0,0,.08);padding:1px 6px;border-radius:10px}
+.evsw button.on .cnt{background:rgba(255,255,255,.22)}
+.astats{display:grid;grid-template-columns:repeat(6,1fr);gap:.5rem;margin-bottom:.9rem}
+.astat{background:var(--w);border-radius:var(--rs);padding:.75rem .8rem;text-align:center;box-shadow:var(--sh);border:1px solid var(--g2)}
+.astat .n{font-size:1.2rem;font-weight:700;margin-bottom:.05rem;line-height:1.2}
+.astat .l{font-size:.64rem;color:var(--s);font-weight:600}
+.astat .x{font-size:.6rem;color:var(--g4);margin-top:.1rem}
+.atabs{display:flex;gap:.35rem;margin-bottom:.7rem;flex-wrap:wrap}
+.atab{padding:6px 14px;border:1.5px solid var(--g2);border-radius:20px;background:var(--w);font-size:.76rem;font-weight:600;cursor:pointer;transition:all .15s;color:var(--s);white-space:nowrap}
+.atab.active{background:var(--g);color:#fff;border-color:var(--g)}
+.atab .bdg{background:var(--a);color:#fff;border-radius:20px;padding:1px 6px;font-size:.62rem;font-weight:700;margin-left:4px}
+.toolbar{display:flex;gap:.4rem;margin-bottom:.7rem;flex-wrap:wrap;align-items:center}
+.sel{padding:7px 11px;border:1.5px solid var(--g2);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:.78rem;background:var(--w);outline:none;color:var(--t)}
+.sel:focus{border-color:var(--g)}
+.search{padding:7px 11px;border:1.5px solid var(--g2);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:.78rem;background:var(--w);outline:none;flex:1;min-width:140px}
+.summary{background:var(--w);border:1px solid var(--g2);box-shadow:var(--sh);border-radius:var(--rs);padding:.6rem .9rem;margin-bottom:.7rem;font-size:.78rem;color:var(--s);display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
+
+/* Comprobantes */
+.comp{background:var(--w);border-radius:var(--rr);box-shadow:var(--sh);border:1px solid var(--g2);margin-bottom:.55rem;overflow:hidden;border-left:3px solid var(--g3)}
+.comp.pendiente{border-left-color:var(--a)}
+.comp.confirmado{border-left-color:var(--g)}
+.comp.rechazado{border-left-color:var(--r)}
+.comp-h{display:flex;align-items:flex-start;gap:.75rem;padding:.8rem 1rem .5rem}
+.comp-i{flex:1;min-width:0}
+.comp-t{font-weight:700;font-size:.88rem}
+.comp-s{font-size:.7rem;color:var(--s);margin-top:.05rem}
+.comp-m{text-align:right;flex-shrink:0}
+.comp-mv{font-size:.92rem;font-weight:700}
+.comp-ml{font-size:.64rem;color:var(--s)}
+.comp-p{display:flex;flex-wrap:wrap;gap:.3rem;padding:0 1rem .65rem}
+.ppill{font-size:.7rem;padding:2px 9px;border-radius:20px;background:var(--g1);border:1px solid var(--g2)}
+.ppill span{color:var(--g4)}
+.comp-f{display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap;padding:.55rem 1rem;border-top:1px solid var(--g2);background:var(--g1)}
+.comp-acts{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center}
+.acct{display:inline-flex;align-items:center;gap:.3rem;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--w);border:1px solid var(--g2);color:var(--s)}
+.acct i{font-style:normal;width:8px;height:8px;border-radius:50%;display:inline-block}
+.bver{display:inline-flex;align-items:center;padding:6px 10px;min-height:30px;background:var(--b);color:#fff;border:none;border-radius:var(--rs);font-size:.72rem;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap}
+.bver:hover{opacity:.85}
+.bok{display:inline-flex;align-items:center;justify-content:center;padding:0 12px;height:30px;background:var(--g);color:#fff;border:none;border-radius:var(--rs);font-size:.76rem;font-weight:700;cursor:pointer;gap:.3rem}
+.bok:hover{background:var(--gm)}
+.bno{display:inline-flex;align-items:center;justify-content:center;padding:0 12px;height:30px;background:var(--rl);color:var(--r);border:1.5px solid #f5c0c0;border-radius:var(--rs);font-size:.76rem;font-weight:700;cursor:pointer}
+.bmut{display:inline-flex;align-items:center;padding:6px 10px;min-height:30px;background:var(--g2);color:var(--s);border:none;border-radius:var(--rs);font-size:.72rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.bmut:hover{background:var(--g3)}
+.bwa{display:inline-flex;align-items:center;gap:.3rem;padding:5px 10px;background:var(--w);color:#128C7E;border:1.5px solid #b8e8c8;border-radius:var(--rs);font-size:.74rem;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap}
+.bwa:hover{background:#f0fdf4}
+.wa-sent{font-size:.66rem;color:#128C7E;font-weight:700}
+.estb{padding:3px 8px;border-radius:20px;font-size:.68rem;font-weight:700;white-space:nowrap}
+
+/* Tabla inscriptos */
+.tblwrap{overflow-x:auto;border-radius:var(--rr);box-shadow:var(--sh)}
+.itable{width:100%;border-collapse:collapse;background:var(--w);font-size:.78rem}
+.itable th{background:var(--g);color:#fff;padding:8px 10px;text-align:left;font-weight:600;font-size:.72rem;white-space:nowrap}
+.itable td{padding:8px 10px;border-bottom:1px solid var(--g2);vertical-align:middle}
+.itable tr.gr{cursor:pointer}
+.itable tr.gr:hover td{background:var(--g1)}
+.itable tr.gr.open td{background:var(--g1)}
+.itable td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.itable .nm{font-weight:600}
+.itable .sub{font-size:.66rem;color:var(--s);font-weight:400}
+.det td{background:#fbfcfb;padding:.3rem .8rem .8rem 2.2rem}
+.dtable{width:100%;border-collapse:collapse;font-size:.76rem}
+.dtable td{padding:6px 8px;border-bottom:1px solid var(--g2)}
+.dtable tr:last-child td{border-bottom:none}
+.lnk{background:none;border:none;color:var(--b);font-size:.72rem;font-weight:700;cursor:pointer;padding:0}
+.lnk.red{color:var(--r)}
+.menu-wrap{position:relative;display:inline-block}
+.menu-btn{background:var(--w);border:1.5px solid var(--g2);border-radius:var(--rs);padding:3px 9px;cursor:pointer;font-size:.82rem;color:var(--s)}
+.menu-btn:hover{background:var(--g2)}
+.menu-drop{position:fixed;background:var(--w);border:1px solid var(--g2);border-radius:var(--rs);box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:50;min-width:200px;display:none;padding:4px 0}
+.menu-drop.open{display:block}
+.menu-item{display:block;width:100%;padding:8px 14px;font-size:.8rem;background:none;border:none;text-align:left;cursor:pointer;color:var(--t)}
+.menu-item:hover{background:var(--g1)}
+.menu-sep{height:1px;background:var(--g2);margin:4px 0}
+
+/* Campañas */
+.camp-builder{background:var(--w);border:1px solid var(--g2);box-shadow:var(--sh);border-radius:var(--rr);padding:.9rem 1rem;margin-bottom:1rem}
+.camp-builder-title{font-size:.84rem;font-weight:700;margin-bottom:.55rem}
+.camp-count{font-size:.74rem;color:var(--s);margin-top:.55rem}
+.camp-lista{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem}
+.camp-card{background:var(--w);border-radius:var(--rs);border:1px solid var(--g2);padding:.9rem 1rem;display:flex;align-items:center;gap:.75rem;box-shadow:var(--sh);cursor:pointer}
+.camp-card:hover{background:var(--g1)}
+.camp-card.activa{border-left:3px solid var(--g)}
+.camp-card.archivada{border-left:3px solid var(--g3);opacity:.75}
+.camp-info{flex:1;min-width:0}
+.camp-nombre{font-weight:700;font-size:.88rem}
+.camp-meta{font-size:.7rem;color:var(--s);margin-top:.1rem}
+.camp-prog{width:90px;flex-shrink:0;text-align:right}
+.camp-bar{height:5px;background:var(--g2);border-radius:3px;overflow:hidden;margin-bottom:.2rem}
+.camp-bar div{height:100%;background:var(--g)}
+.camp-ptxt{font-size:.68rem;color:var(--s)}
+.camp-dest{background:var(--w);border-radius:var(--rs);border:1px solid var(--g2);margin-bottom:.4rem;padding:.7rem 1rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.camp-dest.enviado{opacity:.6}
+.camp-dest.enviado .camp-nombre{text-decoration:line-through}
+.chips-ph{display:flex;flex-wrap:wrap;gap:.3rem;margin:-.3rem 0 .75rem}
+.chips-ph button{font-size:.68rem;padding:2px 8px;border-radius:20px;border:1px solid var(--g2);background:var(--g1);cursor:pointer;font-family:ui-monospace,Menlo,monospace}
+.chips-ph button:hover{background:var(--gl);border-color:#b8e0cc}
+
+/* Cuentas */
+.acc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem}
+.acard{background:var(--w);border-radius:var(--rr);box-shadow:var(--sh);border:1px solid var(--g2);padding:1rem;border-top:4px solid var(--g3)}
+.acard h4{font-size:.95rem;margin-bottom:.1rem}
+.acard .al{font-family:ui-monospace,Menlo,monospace;font-size:.78rem;color:var(--s);word-break:break-all}
+.acard .big{font-size:1.25rem;font-weight:700;margin:.7rem 0 .1rem}
+.acard .kv{display:flex;justify-content:space-between;font-size:.76rem;padding:.25rem 0;border-bottom:1px solid var(--g2)}
+.acard .kv:last-of-type{border-bottom:none}
+.acard .kv span:first-child{color:var(--s)}
+.acard .kv b{font-variant-numeric:tabular-nums}
+.acard .acts{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.7rem}
+
+/* Modales */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto}
+.modal{background:var(--w);border-radius:var(--rr);padding:1.5rem;max-width:460px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,.15);margin:auto 0}
+.modal h3{font-family:'DM Serif Display',serif;font-size:1.18rem;margin-bottom:.55rem}
+.modal p{font-size:.82rem;color:var(--s);margin-bottom:1rem;line-height:1.5}
+.modal-btns{display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap}
+
+@media(max-width:760px){
+  .astats{grid-template-columns:repeat(3,1fr)}
+  .acc-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .evsw{display:flex;width:100%}
+  .evsw button{flex:1;justify-content:center;padding:8px 6px;font-size:.78rem;flex-wrap:wrap;text-align:center}
+  .evsw .cnt-l{display:none}
+  .toolbar{flex-direction:column;align-items:stretch}
+  .comp-h{flex-wrap:wrap}
+  .comp-m{text-align:left}
+  .pcard{padding:1.8rem 1.3rem}
+}
+</style>
+</head>
+<body data-ev="misa">
+
+<!-- ============ PORTAL: ELEGIR EVENTO ============ -->
+<div id="ph" class="page center active">
+  <div class="pcard">
+    <div class="kicker">Visita del Papa · Micros</div>
+    <div class="ptitle">Pago de micros</div>
+    <p class="psub">Elegí para qué viaje querés cargar el pago.</p>
+    <button class="evcard misa" onclick="elegirEvento('misa')">
+      <div class="evic">⛪</div>
+      <div><div class="evn" id="h-misa-n"></div><div class="evd" id="h-misa-d"></div></div>
+      <div class="evarr">›</div>
+    </button>
+    <button class="evcard jovenes" onclick="elegirEvento('jovenes')">
+      <div class="evic">✨</div>
+      <div><div class="evn" id="h-jov-n"></div><div class="evd" id="h-jov-d"></div></div>
+      <div class="evarr">›</div>
+    </button>
+    <div class="pfoot"><a href="#" onclick="mostrarAdminLogin();return false">Administrador</a></div>
+  </div>
+</div>
+
+<!-- ============ PORTAL: DNI ============ -->
+<div id="pl" class="page center">
+  <div class="pcard">
+    <span class="evtag" id="l-tag"></span>
+    <div class="ptitle" id="l-title"></div>
+    <p class="psub" id="l-sub"></p>
+    <div class="ig"><label id="l-lbl">DNI (sin puntos)</label><input type="text" inputmode="numeric" id="dni-input" placeholder="Ej: 44123456" autocomplete="off"/></div>
+    <button class="bp" id="btn-buscar" onclick="buscarGrupo()">Ingresar →</button>
+    <div class="err" id="l-err"></div>
+    <button class="bs" onclick="irInicio()">← Elegir otro viaje</button>
+  </div>
+</div>
+
+<!-- ============ PORTAL: RESERVA / PAGO ============ -->
+<div id="pg" class="page">
+  <div class="gwrap">
+    <div class="gtop">
+      <span class="evtag" id="g-tag" style="margin:0"></span>
+      <button class="bs bsm" onclick="salirPortal()">Salir</button>
+    </div>
+    <div id="g-load" class="load"><div class="spin"></div><span>Cargando...</span></div>
+    <div id="g-content" style="display:none"></div>
+  </div>
+</div>
+
+<!-- ============ ADMIN LOGIN ============ -->
+<div id="pal" class="page center">
+  <div class="pcard" style="max-width:380px">
+    <div style="font-size:1.6rem;margin-bottom:.8rem">🔑</div>
+    <div class="ptitle" style="font-size:1.45rem">Panel Admin</div>
+    <p class="psub">Ingresá la contraseña para continuar.</p>
+    <div class="ig"><label>Contraseña</label><input type="password" id="admin-pass" placeholder="••••••••"/></div>
+    <button class="bp" onclick="verificarAdmin()">Entrar →</button>
+    <div class="err" id="admin-err"></div>
+    <button class="bs" onclick="irInicio()">← Volver</button>
+  </div>
+</div>
+
+<!-- ============ ADMIN ============ -->
+<div id="pa" class="page">
+  <div class="awrap">
+    <div class="ahead">
+      <div style="display:flex;align-items:center;gap:.7rem">
+        <div class="atitle">Panel Admin · Micros</div>
+        <span class="role" id="role-badge"></span>
+      </div>
+      <div class="ahead-r">
+        <button class="bs bsm" onclick="exportarCSV()">⬇ Exportar</button>
+        <button class="bs bsm" id="btn-pago-manual" onclick="abrirPagoManual()">+ Registrar pago recibido</button>
+        <button class="bs bsm" onclick="cargarAdmin(true)">↺ Actualizar</button>
+        <button class="bs bsm" onclick="irInicio()">Salir</button>
+      </div>
+    </div>
+
+    <div class="evsw" id="evsw">
+      <button class="misa" onclick="setAdminEv('misa')">⛪ <span id="sw-misa"></span> <span class="cnt" id="sw-misa-c">·</span></button>
+      <button class="jovenes" onclick="setAdminEv('jovenes')">✨ <span id="sw-jov"></span> <span class="cnt" id="sw-jov-c">·</span></button>
+    </div>
+
+    <div class="astats" id="admin-stats"></div>
+
+    <div class="atabs" id="vtabs">
+      <button class="atab active" data-v="comprobantes" onclick="cambiarVista('comprobantes')">Comprobantes <span class="bdg" id="bdg-rev" style="display:none"></span></button>
+      <button class="atab" data-v="inscriptos" onclick="cambiarVista('inscriptos')" id="tab-ins">Reservas</button>
+      <button class="atab" data-v="campanas" onclick="cambiarVista('campanas')">Campañas <span class="bdg" id="bdg-camp" style="display:none"></span></button>
+      <button class="atab" data-v="cuentas" onclick="cambiarVista('cuentas')">Cuentas</button>
+    </div>
+
+    <div id="admin-load" class="load" style="display:none"><div class="spin"></div><span>Cargando...</span></div>
+    <div id="admin-err-box"></div>
+
+    <!-- Vista comprobantes -->
+    <div id="v-comprobantes" class="vista">
+      <div class="atabs" id="comp-tabs">
+        <button class="atab active" data-f="pendiente" onclick="setCompFiltro('pendiente')">Por revisar</button>
+        <button class="atab" data-f="confirmado" onclick="setCompFiltro('confirmado')">Confirmados</button>
+        <button class="atab" data-f="rechazado" onclick="setCompFiltro('rechazado')">No validados</button>
+        <button class="atab" data-f="todos" onclick="setCompFiltro('todos')">Todos</button>
+      </div>
+      <div class="toolbar">
+        <select id="comp-cuenta" class="sel" onchange="renderComprobantes()"></select>
+        <select id="comp-medio" class="sel" onchange="renderComprobantes()">
+          <option value="">Todos los medios</option>
+          <option value="Transferencia">Transferencia</option>
+          <option value="Efectivo">Efectivo</option>
+        </select>
+        <input type="text" id="comp-search" class="search" placeholder="Buscar por nombre o DNI..." oninput="renderComprobantes()">
+      </div>
+      <div id="comp-summary" class="summary" style="display:none"></div>
+      <div id="comp-list"></div>
+    </div>
+
+    <!-- Vista reservas / inscriptos -->
+    <div id="v-inscriptos" class="vista" style="display:none">
+      <div class="toolbar">
+        <select id="f-estado" class="sel" onchange="renderInscriptos()">
+          <option value="">Todos los estados</option>
+          <option value="sin_pagos">Sin pagos</option>
+          <option value="parcial">Pago parcial</option>
+          <option value="en_revision">En revisión</option>
+          <option value="rechazado">Comprobante no validado</option>
+          <option value="completo">Pago completo</option>
+          <option value="deben">⚠ Deben algo</option>
+          <option value="sin_cargo">Sin cargo</option>
+        </select>
+        <select id="f-cuenta" class="sel" onchange="renderInscriptos()"></select>
+        <select id="f-aviso" class="sel" onchange="renderInscriptos()">
+          <option value="">Aviso de pago: todos</option>
+          <option value="no">No avisados</option>
+          <option value="si">Ya avisados</option>
+        </select>
+        <select id="f-par" class="sel" onchange="renderInscriptos()"></select>
+        <select id="f-com" class="sel" onchange="renderInscriptos()"></select>
+        <select id="f-ord" class="sel" onchange="renderInscriptos()">
+          <option value="orden">Por orden de inscripción</option>
+          <option value="nombre">Por nombre</option>
+          <option value="deuda">Mayor deuda primero</option>
+          <option value="reciente">Más recientes primero</option>
+        </select>
+        <input type="text" id="f-search" class="search" placeholder="Buscar nombre o DNI (incluye pasajeros)..." oninput="renderInscriptos()">
+      </div>
+      <div class="summary" id="ins-summary">
+        <span id="ins-summary-text"></span>
+        <span style="display:flex;gap:.4rem;flex-wrap:wrap">
+          <button class="bs bsm" onclick="copiarResumen()">📋 Copiar resumen</button>
+          <button class="bp bsm" style="margin:0" onclick="abrirNuevaCampana('ins')">+ Campaña con filtrados</button>
+        </span>
+      </div>
+      <div class="tblwrap">
+        <table class="itable">
+          <thead id="ins-thead"></thead>
+          <tbody id="ins-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Vista campañas -->
+    <div id="v-campanas" class="vista" style="display:none">
+      <div class="camp-builder">
+        <div class="camp-builder-title">Nueva campaña de WhatsApp</div>
+        <div class="toolbar" style="margin-bottom:0">
+          <select id="c-estado" class="sel" onchange="previewCampana()">
+            <option value="deben">⚠ Deben algo</option>
+            <option value="sin_pagos">Sin pagos</option>
+            <option value="parcial">Pago parcial</option>
+            <option value="rechazado">Comprobante no validado</option>
+            <option value="completo">Pago completo</option>
+            <option value="">Todos</option>
+          </select>
+          <select id="c-cuenta" class="sel" onchange="previewCampana()"></select>
+          <select id="c-aviso" class="sel" onchange="previewCampana()">
+            <option value="">Aviso de pago: todos</option>
+            <option value="no">No avisados</option>
+            <option value="si">Ya avisados</option>
+          </select>
+          <select id="c-par" class="sel" onchange="previewCampana()"></select>
+          <select id="c-com" class="sel" onchange="previewCampana()"></select>
+          <button class="bp bsm" style="margin:0" onclick="abrirNuevaCampana('camp')">Crear con este filtro</button>
+        </div>
+        <div class="camp-count" id="camp-preview"></div>
+      </div>
+      <div id="camp-listas">
+        <div class="plbl">Activas</div>
+        <div id="camp-activas" class="camp-lista"></div>
+        <div id="camp-arch-wrap" style="display:none">
+          <div class="plbl" style="cursor:pointer" onclick="toggleArch()">Archivadas <span id="camp-arch-t">▶</span></div>
+          <div id="camp-archivadas" class="camp-lista" style="display:none"></div>
+        </div>
+      </div>
+      <div id="camp-detalle" style="display:none"></div>
+    </div>
+
+    <!-- Vista cuentas -->
+    <div id="v-cuentas" class="vista" style="display:none">
+      <p style="font-size:.8rem;color:var(--s);margin-bottom:.75rem">Qué cuenta le toca a cada comunidad se define en la pestaña <b>Reparto</b> de la planilla. Lo que no tenga regla se reparte solo, equilibrando asientos. Para cambiar una reserva puntual, usá el menú ··· de la reserva.</p>
+      <div class="acc-grid" id="acc-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL RECHAZO -->
+<div class="overlay" id="m-rech" style="display:none" onclick="if(event.target===this)cerrarModal('m-rech')">
+  <div class="modal">
+    <h3>No validar comprobante</h3>
+    <p>Las personas de este comprobante van a poder cargar uno nuevo desde el portal. Después podés avisarle por WhatsApp.</p>
+    <div class="ig"><label>Motivo (lo ve la persona en el portal)</label><input type="text" id="rech-motivo" placeholder="Ej: no se ve el monto / no llegó a la cuenta"/></div>
+    <div class="modal-btns">
+      <button class="brd" onclick="confirmarRechazo()">No validar</button>
+      <button class="bgr" onclick="cerrarModal('m-rech')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PAGO MANUAL -->
+<div class="overlay" id="m-manual" style="display:none" onclick="if(event.target===this)cerrarModal('m-manual')">
+  <div class="modal" style="max-width:520px">
+    <h3>Registrar pago recibido</h3>
+    <p>Para pagos que llegaron por fuera del portal (efectivo, o una transferencia que te mandaron por WhatsApp). Queda confirmado directamente.</p>
+    <div class="ig" id="man-buscar-wrap"><label>DNI de alguien de la reserva</label>
+      <div style="display:flex;gap:.4rem"><input type="text" id="man-dni" placeholder="Ej: 44123456" inputmode="numeric"/><button class="bgr" onclick="manualBuscar()">Buscar</button></div>
+    </div>
+    <div id="man-grupo"></div>
+    <div id="man-campos" style="display:none">
+      <div class="ig"><label>Medio de pago</label>
+        <select id="man-medio"><option value="Efectivo">Efectivo</option><option value="Transferencia">Transferencia</option></select>
+      </div>
+      <div class="ig"><label>Recibido por</label><input type="text" id="man-recibido" placeholder="Quién recibió el dinero"/></div>
+      <div class="ig"><label>Observación interna</label><textarea id="man-obs" rows="2" placeholder="Opcional"></textarea></div>
+    </div>
+    <div class="mbox" id="man-msg"></div>
+    <div class="modal-btns">
+      <button class="bp" style="width:auto;margin-top:0" id="man-btn" onclick="registrarManual()">Registrar pago</button>
+      <button class="bgr" onclick="cerrarModal('m-manual')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CAMBIAR CUENTA -->
+<div class="overlay" id="m-cuenta" style="display:none" onclick="if(event.target===this)cerrarModal('m-cuenta')">
+  <div class="modal">
+    <h3>Cambiar cuenta asignada</h3>
+    <p id="mc-txt"></p>
+    <div class="ig"><label>Cuenta</label><select id="mc-sel"></select></div>
+    <div class="modal-btns">
+      <button class="bp" style="width:auto;margin-top:0" onclick="confirmarCuenta()">Guardar</button>
+      <button class="bgr" onclick="cerrarModal('m-cuenta')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL BAJA -->
+<div class="overlay" id="m-baja" style="display:none" onclick="if(event.target===this)cerrarModal('m-baja')">
+  <div class="modal">
+    <h3>Dar de baja</h3>
+    <p id="mb-txt">La persona deja de contar para el micro y para lo que se debe. Sus pagos quedan en el historial.</p>
+    <div class="ig"><label>Nota (opcional)</label><input type="text" id="mb-nota" placeholder="Ej: avisó que no viaja"/></div>
+    <div class="modal-btns">
+      <button class="brd" onclick="confirmarBaja()">Dar de baja</button>
+      <button class="bgr" onclick="cerrarModal('m-baja')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NUEVA CAMPAÑA -->
+<div class="overlay" id="m-camp" style="display:none" onclick="if(event.target===this)cerrarModal('m-camp')">
+  <div class="modal" style="max-width:560px">
+    <h3>Nueva campaña</h3>
+    <p id="nc-count"></p>
+    <div class="ig"><label>Nombre de la campaña</label><input type="text" id="nc-nombre" placeholder="Ej: Datos de pago — primera tanda"/></div>
+    <div class="ig"><label>Plantilla</label>
+      <select id="nc-plantilla" onchange="aplicarPlantilla()">
+        <option value="datos">Datos para transferir</option>
+        <option value="recordatorio">Recordatorio de pago</option>
+        <option value="libre">Mensaje libre</option>
+      </select>
+    </div>
+    <div class="ig"><label>Mensaje</label>
+      <textarea id="nc-msg" rows="10" style="resize:vertical"></textarea>
+    </div>
+    <div class="chips-ph" id="nc-ph"></div>
+    <label style="display:flex;gap:.5rem;align-items:center;font-size:.78rem;color:var(--s);margin-bottom:.4rem"><input type="checkbox" id="nc-marcar" checked> Marcar como "avisado" cada reserva a la que se le envía</label>
+    <div class="modal-btns">
+      <button class="bp" style="width:auto;margin-top:0" onclick="crearCampana()">Crear campaña</button>
+      <button class="bgr" onclick="cerrarModal('m-camp')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════ CONFIGURACIÓN ════════════════════════════
+// URL de la aplicación web de Apps Script (termina en /exec). Si queda vacía, la app arranca en modo demo.
+const API        = 'https://script.google.com/macros/s/AKfycbz1VEIcczoD8_Lm8iK06LpKgc3n4EI9tUprQv6QOJ4IWFXy5IVDPsSYMAP_C94l1RxJ/exec';
+const CLD_CLOUD  = 'fsxnlo1z';
+const CLD_PRESET = 'micros-papa';
+const PORTAL_URL = window.location.origin + window.location.pathname;
+
+const EVENTOS = {
+  misa: {
+    key:'misa', icon:'⛪', corto:'Misa con el Papa',
+    nombre:'Misa con el Papa', fecha:'Lunes 9 de noviembre',
+    reserva:true
+  },
+  jovenes: {
+    key:'jovenes', icon:'✨', corto:'Encuentro de Jóvenes',
+    nombre:'Encuentro de Jóvenes con el Papa', fecha:'Martes 10 de noviembre',
+    reserva:false
+  }
+};
+const CUENTA_COLORES = ['#1a7a56','#1a5fa8','#d4820a','#7c3aed','#b83232'];
+const ELABEL = {pagado:'Pagado',en_revision:'En revisión',rechazado:'No validado',sin_pago:'Sin pagar',sin_cargo:'Sin cargo · en brazos',baja:'Baja',
+                completo:'Pago completo',parcial:'Pago parcial',sin_pagos:'Sin pagos'};
+
+const DEMO = !API || new URLSearchParams(location.search).has('demo');
+
+// ════════════════════════════ ESTADO ════════════════════════════
+var ev = 'misa';                // evento del portal
+var grupoData = null, dniActual = '';
+var adminEv = 'misa', adminToken = '', adminRole = '';
+var adminData = {misa:null, jovenes:null};
+var vista = 'comprobantes', compFiltro = 'pendiente';
+var abiertos = {};              // grupos expandidos en la tabla
+var modalCtx = {};              // contexto del modal abierto
+
+function $$(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function ars(n){ return '$' + Number(n||0).toLocaleString('es-AR'); }
+function ini(nombre){ var p=String(nombre||'?').trim().split(/\s+/); return ((p[0]||'?').charAt(0)+(p[1]||'').charAt(0)).toUpperCase(); }
+function primer(n){ return String(n||'').trim().split(/\s+/)[0]||''; }
+function hoyTxt(){ return new Date().toLocaleDateString('es-AR'); }
+function edicion(){ return adminRole==='edit'; }
+function sp(id){ document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');}); $$(id).classList.add('active'); window.scrollTo(0,0); }
+function cerrarModal(id){ $$(id).style.display='none'; }
+function showMsg(el,txt,ok){ el.textContent=txt; el.className='mbox '+(ok?'mok':'mer'); el.style.display='block'; }
+function setEvBody(k){ document.body.setAttribute('data-ev',k); }
+function evInfo(k){ var e=EVENTOS[k]; return e.nombre+(e.fecha?' · '+e.fecha:''); }
+function portalLink(k){ return PORTAL_URL+'?e='+k; }
+
+async function api(action, params){
+  params = Object.assign({action:action}, params||{});
+  if(DEMO) return Mock.handle(params);
+  var qs = Object.keys(params).map(function(k){ return encodeURIComponent(k)+'='+encodeURIComponent(params[k]==null?'':params[k]); }).join('&');
+  var res = await fetch(API+'?'+qs);
+  return await res.json();
+}
+
+// ════════════════════════════ PORTAL ════════════════════════════
+function irInicio(){ setEvBody('misa'); sp('ph'); }
+function elegirEvento(k){
+  ev=k; setEvBody(k);
+  var e=EVENTOS[k];
+  $$('l-tag').textContent=e.icon+' '+e.corto;
+  $$('l-title').innerHTML=esc(e.nombre);
+  $$('l-sub').textContent = e.reserva
+    ? 'Ingresá el DNI de quien hizo la reserva. También funciona con el DNI de cualquier persona que esté anotada en ella.'
+    : 'Ingresá tu DNI, el mismo que pusiste al inscribirte.';
+  $$('l-lbl').textContent = e.reserva ? 'DNI del responsable de la reserva' : 'Tu DNI (sin puntos)';
+  $$('l-err').textContent=''; $$('dni-input').value='';
+  sp('pl'); setTimeout(function(){ $$('dni-input').focus(); },50);
+}
+function salirPortal(){ grupoData=null; dniActual=''; elegirEvento(ev); }
+
+async function buscarGrupo(){
+  var dni=$$('dni-input').value.replace(/\D/g,'');
+  if(dni.length<6){ $$('l-err').textContent='Ingresá un DNI válido, sin puntos.'; return; }
+  $$('l-err').textContent=''; dniActual=dni;
+  await cargarGrupo(true);
+}
+async function cargarGrupo(desdeLogin){
+  sp('pg'); $$('g-tag').textContent=EVENTOS[ev].icon+' '+EVENTOS[ev].corto;
+  $$('g-load').style.display='flex'; $$('g-content').style.display='none';
+  try{
+    var d=await api('getGrupo',{evento:ev,dni:dniActual});
+    if(!d.ok){ if(desdeLogin){ sp('pl'); $$('l-err').textContent=d.error; } else salirPortal(); return; }
+    grupoData=d; renderGrupo();
+  }catch(e){ sp('pl'); $$('l-err').textContent='Error de conexión. Intentá de nuevo.'; }
+}
+
+function renderGrupo(){
+  var d=grupoData, g=d.grupo, e=EVENTOS[ev];
+  var pagables=g.personas.filter(function(p){return p.estado==='sin_pago'||p.estado==='rechazado';});
+  var act=g.cntActivos||1;
+  var pOk=Math.round(g.cntPagados/act*100), pRv=Math.round(g.cntRevision/act*100);
+  var h='';
+  h+='<div class="card hcard"><div class="av">'+esc(ini(g.responsable))+'</div><div style="min-width:0">'+
+     '<div class="hname">'+(e.reserva?'Reserva de '+esc(g.responsable):esc(g.responsable))+'</div>'+
+     '<div class="hsub">'+esc(evInfo(ev))+(e.reserva?' · '+g.personas.length+' persona'+(g.personas.length>1?'s':''):'')+'</div></div></div>';
+
+  if(g.cntActivos>1 && d.cuenta && d.precio>0){
+    h+='<div class="card"><div class="plbl">Estado del pago</div>'+
+       '<div class="pbar"><div style="width:'+pOk+'%;background:var(--g)"></div><div style="width:'+pRv+'%;background:var(--a)"></div></div>'+
+       '<div class="pleg"><span><i class="dot" style="background:var(--g)"></i><b>'+g.cntPagados+'</b> pagado'+(g.cntPagados===1?'':'s')+'</span>'+
+       '<span><i class="dot" style="background:var(--a)"></i><b>'+g.cntRevision+'</b> en revisión</span>'+
+       '<span><i class="dot" style="background:var(--g3)"></i><b>'+g.cntPendientes+'</b> sin pagar</span>'+
+       (d.precio?'<span style="margin-left:auto">Pasaje: <b>'+ars(d.precio)+'</b></span>':'')+'</div></div>';
+  }
+
+  var listo = !!(d.cuenta && d.precio>0);
+  if(pagables.length && !listo){
+    h+='<div class="card" style="text-align:center;padding:1.6rem 1.2rem">'+
+      '<div style="font-size:1.8rem;margin-bottom:.5rem">🚌</div>'+
+      '<div class="serif" style="font-size:1.25rem;margin-bottom:.4rem">'+(e.reserva?'Tu reserva está registrada':'Tu inscripción está registrada')+'</div>'+
+      '<p style="font-size:.85rem;color:var(--s);line-height:1.55">Todavía estamos definiendo <b>horarios y costo del micro</b>. Cuando estén, entrá de nuevo acá con tu DNI para ver a qué alias pagar y luego cargar tu comprobante.</p></div>';
+    h+='<div class="card"><div class="plbl">'+(e.reserva?'Personas de la reserva':'Tu pasaje')+'</div>'+listaPersonasHtml(g, false)+'</div>';
+    h+='<button class="bs" onclick="salirPortal()">← Salir</button>';
+  } else if(!pagables.length){
+    var msg = g.cntActivos===0 ? 'No hay pasajes para pagar en esta reserva.'
+      : g.cntRevision ? 'Ya cargaste todos los comprobantes. Te avisamos cuando estén revisados.'
+      : (e.reserva?'¡Todos los pasajes de la reserva están pagos!':'¡Tu pasaje está pago!')+' Nos vemos en el micro.';
+    h+='<div class="okbanner" style="margin-bottom:.65rem"><span>✅</span><span>'+msg+'</span></div>';
+    h+=listaPersonasHtml(g, false);
+    h+='<button class="bs" onclick="salirPortal()">← Salir</button>';
+  } else {
+    if(d.cuenta){
+      h+='<div class="card"><div class="plbl">1 · Transferí a esta cuenta</div><div class="acc">'+
+        filaCopia('Alias',d.cuenta.alias)+filaCopia('CBU / CVU',d.cuenta.cbu)+
+        '<div class="acc-row"><div><div class="acc-k">Titular</div><div class="acc-v sm">'+esc(d.cuenta.titular)+(d.cuenta.banco?' · '+esc(d.cuenta.banco):'')+'</div></div></div>'+
+        '</div><div class="acc-hint">Esta cuenta está asignada a '+(e.reserva?'tu reserva':'tu inscripción')+'. Transferí solo acá, así el pago se puede validar.</div></div>';
+    } else {
+      h+='<div class="abanner">Todavía no hay una cuenta asignada. Escribile a quien organiza el micro.</div>';
+    }
+    h+='<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:.5rem">'+
+      '<div class="plbl">2 · '+(e.reserva?'¿A quién corresponde el pago?':'Tu pasaje')+'</div>'+
+      (pagables.length>1?'<button class="selall" onclick="selTodos()">Seleccionar todos</button>':'')+'</div>'+
+      listaPersonasHtml(g, true)+
+      '<div class="ctotal" id="ctotal"><span class="ctotal-l" id="ctotal-l">Seleccioná a quién corresponde</span><span class="ctotal-v" id="ctotal-v"></span></div>'+
+      '<div class="plbl" style="margin-top:.4rem">3 · Adjuntá el comprobante</div>'+
+      '<div class="fwrap"><input type="file" id="comp-file" accept="image/*,.pdf" onchange="onFile(this)"/><div class="fi">📎</div>'+
+      '<div class="ft">Subí una captura o PDF del comprobante completo, donde se vean los datos de quien transfiere.</div></div>'+
+      '<div class="fname" id="fname" style="display:none"></div>'+
+      '<div class="mbox" id="g-msg"></div>'+
+      '<button class="bp" style="margin-top:.9rem" id="btn-enviar" onclick="enviarComprobante()">Enviar comprobante</button>'+
+      (e.reserva&&pagables.length>1?'<p class="note">Si pagaste varios pasajes en una sola transferencia, marcá a todas esas personas y subí un solo comprobante. Si hiciste transferencias separadas, cargá cada una por separado.</p>':'')+
+      '</div>';
+  }
+  $$('g-content').innerHTML=h;
+  $$('g-load').style.display='none'; $$('g-content').style.display='block';
+  if(pagables.length===1){ var c=document.querySelector('.prow.pick input'); if(c){ c.checked=true; c.closest('.prow').classList.add('sel'); } }
+  actualizarTotal();
+}
+function filaCopia(k,v){
+  return '<div class="acc-row"><div style="min-width:0"><div class="acc-k">'+k+'</div><div class="acc-v">'+esc(v)+'</div></div>'+
+    '<button class="copy" data-v="'+esc(v)+'" onclick="copiar(this)">Copiar</button></div>';
+}
+function copiar(btn){
+  var v=btn.getAttribute('data-v');
+  var done=function(){ btn.textContent='✓ Copiado'; btn.classList.add('ok'); setTimeout(function(){btn.textContent='Copiar';btn.classList.remove('ok');},1800); };
+  if(navigator.clipboard) navigator.clipboard.writeText(v).then(done).catch(function(){ prompt('Copiá:',v); });
+  else prompt('Copiá:',v);
+}
+function listaPersonasHtml(g, conChecks){
+  return g.personas.map(function(p){
+    var pick = conChecks && (p.estado==='sin_pago'||p.estado==='rechazado');
+    var chip = p.estado==='sin_pago' ? '' : '<span class="chip c-'+p.estado+'">'+(p.estado==='pagado'?'✓ ':p.estado==='en_revision'?'⏳ ':p.estado==='rechazado'?'✕ ':'')+ELABEL[p.estado]+'</span>';
+    var sub = 'DNI '+esc(p.dni)+(p.modalidad==='asiento'&&grupoData.precio>0&&grupoData.cuenta?' · '+ars(p.monto):'');
+    var mot = p.estado==='rechazado' ? '<div class="pmot">El comprobante anterior no se pudo validar'+(p.motivo?': '+esc(p.motivo):'')+'. Cargalo de nuevo.</div>' : '';
+    if(pick) return '<label class="prow pick"><input type="checkbox" value="'+esc(p.dni)+'" data-monto="'+p.monto+'" onchange="this.closest(\'.prow\').classList.toggle(\'sel\',this.checked);actualizarTotal()"><div class="pi"><div class="pn">'+esc(p.nombre)+'</div><div class="pd">'+sub+'</div>'+mot+'</div>'+chip+'</label>';
+    return '<div class="prow done"><span class="lock">'+(p.estado==='pagado'?'✓':'·')+'</span><div class="pi"><div class="pn">'+esc(p.nombre)+'</div><div class="pd">'+sub+'</div></div>'+chip+'</div>';
+  }).join('');
+}
+function selTodos(){
+  var cs=document.querySelectorAll('.prow.pick input'); var todos=Array.from(cs).every(function(c){return c.checked;});
+  cs.forEach(function(c){ c.checked=!todos; c.closest('.prow').classList.toggle('sel',!todos); });
+  actualizarTotal();
+}
+function actualizarTotal(){
+  var cs=Array.from(document.querySelectorAll('.prow.pick input:checked'));
+  var l=$$('ctotal-l'), v=$$('ctotal-v'); if(!l) return;
+  if(!cs.length){ l.textContent='Seleccioná a quién corresponde'; v.textContent=''; return; }
+  var tot=cs.reduce(function(a,c){return a+Number(c.getAttribute('data-monto')||0);},0);
+  l.textContent=cs.length+' pasaje'+(cs.length>1?'s':'')+' · total a transferir';
+  v.textContent=tot?ars(tot):'';
+}
+function onFile(inp){ var f=inp.files[0], el=$$('fname'); if(f){ el.textContent='✓ '+f.name; el.style.display='block'; } else el.style.display='none'; }
+
+async function subirACloudinary(file){
+  if(DEMO){ await new Promise(function(r){setTimeout(r,500);}); return 'https://res.cloudinary.com/demo/image/upload/sample.jpg'; }
+  var form=new FormData();
+  form.append('file',file); form.append('upload_preset',CLD_PRESET);
+  form.append('folder','micros-papa/'+ev+'/'+dniActual);
+  var res=await fetch('https://api.cloudinary.com/v1_1/'+CLD_CLOUD+'/auto/upload',{method:'POST',body:form});
+  var data=await res.json();
+  if(!res.ok||!data.secure_url) throw new Error(data.error&&data.error.message?data.error.message:'No se pudo subir el comprobante.');
+  return data.secure_url;
+}
+
+async function enviarComprobante(){
+  var msg=$$('g-msg');
+  var dnis=Array.from(document.querySelectorAll('.prow.pick input:checked')).map(function(c){return c.value;});
+  if(!dnis.length){ showMsg(msg,'Seleccioná a quién corresponde el pago.',false); return; }
+  var file=$$('comp-file').files[0];
+  if(!file){ showMsg(msg,'Adjuntá el comprobante.',false); return; }
+  if(file.size>10*1024*1024){ showMsg(msg,'El archivo es muy grande. Máximo 10 MB.',false); return; }
+  var btn=$$('btn-enviar'); btn.disabled=true; btn.textContent='Subiendo comprobante...';
+  try{
+    var url=await subirACloudinary(file);
+    btn.textContent='Registrando...';
+    var d=await api('registrarPago',{evento:ev,dni:dniActual,dnis:dnis.join(','),comprobanteUrl:url,comprobanteNombre:file.name});
+    if(!d.ok){ showMsg(msg,d.error||'No se pudo registrar.',false); btn.disabled=false; btn.textContent='Enviar comprobante'; return; }
+    $$('g-content').innerHTML='<div class="card" style="text-align:center;padding:2.6rem 1.2rem"><div style="font-size:2.4rem;margin-bottom:.7rem">✅</div>'+
+      '<div class="serif" style="font-size:1.4rem;margin-bottom:.35rem">¡Comprobante enviado!</div>'+
+      '<p style="font-size:.85rem;color:var(--s);margin-bottom:1.4rem">Registramos el pago de '+dnis.length+' pasaje'+(dnis.length>1?'s':'')+'. Lo vamos a revisar y vas a ver el estado actualizado acá.</p>'+
+      '<button class="bp" onclick="cargarGrupo(false)">Ver '+(EVENTOS[ev].reserva?'la reserva':'mi estado')+' →</button></div>';
+  }catch(e){ showMsg(msg,e.message||'Error de conexión.',false); btn.disabled=false; btn.textContent='Enviar comprobante'; }
+}
+
+// ════════════════════════════ ADMIN ════════════════════════════
+function mostrarAdminLogin(){ sp('pal'); $$('admin-pass').value=''; $$('admin-err').textContent=''; setTimeout(function(){$$('admin-pass').focus();},50); }
+async function verificarAdmin(){
+  var pass=$$('admin-pass').value.trim();
+  if(!pass){ $$('admin-err').textContent='Ingresá la contraseña.'; return; }
+  try{
+    var d=await api('loginAdmin',{adminPass:pass});
+    if(!d.ok){ $$('admin-err').textContent=d.error||'Contraseña incorrecta.'; return; }
+    adminToken=d.token; adminRole=d.role||'view';
+    $$('role-badge').textContent=edicion()?'Modo edición':'Modo vista';
+    $$('btn-pago-manual').style.display=edicion()?'':'none';
+    adminData={misa:null,jovenes:null};
+    sp('pa'); setAdminEv(adminEv);
+    // Precarga el otro evento para los contadores del selector
+    var otro=adminEv==='misa'?'jovenes':'misa';
+    api('getAdmin',{evento:otro,adminToken:adminToken}).then(function(x){ if(x.ok){ adminData[otro]=x; renderSwitch(); } });
+  }catch(e){ $$('admin-err').textContent='Error de conexión.'; }
+}
+function D(){ return adminData[adminEv]; }
+function setAdminEv(k){
+  adminEv=k; setEvBody(k); abiertos={};
+  document.querySelectorAll('#evsw button').forEach(function(b){ b.classList.toggle('on', b.classList.contains(k)); });
+  $$('tab-ins').textContent = EVENTOS[k].reserva ? 'Reservas' : 'Inscriptos';
+  cargarAdmin(false);
+}
+function renderSwitch(){
+  $$('sw-misa').textContent=EVENTOS.misa.corto; $$('sw-jov').textContent=EVENTOS.jovenes.corto;
+  ['misa','jovenes'].forEach(function(k){
+    var d=adminData[k], el=$$(k==='misa'?'sw-misa-c':'sw-jov-c');
+    if(!d){ el.textContent='·'; el.title=''; return; }
+    var n=d.comprobantes.filter(function(c){return c.estado==='pendiente';}).length;
+    el.innerHTML=n?n+'<span class="cnt-l"> por revisar</span>':'al día';
+  });
+}
+async function cargarAdmin(force){
+  if(D() && !force){ renderAdmin(); return; }
+  $$('admin-load').style.display='flex'; $$('admin-err-box').innerHTML='';
+  document.querySelectorAll('.vista').forEach(function(v){ v.style.opacity='.35'; });
+  try{
+    var d=await api('getAdmin',{evento:adminEv,adminToken:adminToken});
+    $$('admin-load').style.display='none';
+    document.querySelectorAll('.vista').forEach(function(v){ v.style.opacity=''; });
+    if(!d.ok){ $$('admin-err-box').innerHTML='<p style="color:var(--r);text-align:center;padding:1rem">'+esc(d.error||'No autorizado.')+'</p>'; return; }
+    adminData[adminEv]=d;
+    poblarFiltros(); renderAdmin();
+  }catch(e){
+    $$('admin-load').style.display='none';
+    document.querySelectorAll('.vista').forEach(function(v){ v.style.opacity=''; });
+    $$('admin-err-box').innerHTML='<p style="color:var(--r);text-align:center;padding:1rem">Error al cargar.</p>';
+  }
+}
+function renderAdmin(){
+  if(!D()) return;
+  poblarFiltros();
+  renderSwitch(); renderStats();
+  cambiarVista(vista);
+}
+function cuentaPorId(id){ return (D().cuentas||[]).find(function(c){return c.id===id;})||null; }
+function colorCuenta(id){ var i=(D().cuentas||[]).findIndex(function(c){return c.id===id;}); return i<0?'var(--g3)':CUENTA_COLORES[i%CUENTA_COLORES.length]; }
+function acctPill(id){ var c=cuentaPorId(id); return '<span class="acct"><i style="background:'+colorCuenta(id)+'"></i>'+esc(c?c.alias:(id||'Sin cuenta'))+'</span>'; }
+function grupoPorId(id){ return D().grupos.find(function(g){return g.id===id;})||null; }
+
+function opcionesSelect(el, base, valores, fmt){
+  var prev=el.value;
+  el.innerHTML='<option value="">'+base+'</option>'+valores.map(function(v){return '<option value="'+esc(v)+'">'+esc(fmt?fmt(v):v)+'</option>';}).join('');
+  if(valores.indexOf(prev)>=0) el.value=prev;
+}
+var _filtrosDe='';
+function poblarFiltros(){
+  if(!D()) return;
+  if(_filtrosDe===adminEv+D().grupos.length) return; _filtrosDe=adminEv+D().grupos.length;
+  var cuentas=D().cuentas.map(function(c){return c.id;});
+  var fmtC=function(id){ var c=cuentaPorId(id); return c?(c.alias+' · '+c.titular):id; };
+  ['comp-cuenta','f-cuenta','c-cuenta'].forEach(function(id){ opcionesSelect($$(id),'Todas las cuentas',cuentas,fmtC); });
+  var pars=[...new Set(D().grupos.map(function(g){return g.parroquia;}).filter(Boolean))].sort();
+  var coms=[...new Set(D().grupos.map(function(g){return g.comunidad;}).filter(Boolean))].sort(function(a,b){return (parseInt(a)||99)-(parseInt(b)||99)||a.localeCompare(b);});
+  ['f-par','c-par'].forEach(function(id){ opcionesSelect($$(id),'Todas las parroquias',pars); });
+  ['f-com','c-com'].forEach(function(id){ opcionesSelect($$(id),'Todas las comunidades',coms); });
+}
+
+function totales(){
+  var d=D(), gs=d.grupos, t={personas:0,cobrar:0,pagados:0,revision:0,pendientes:0,esperado:0,recaudado:0,brazos:0,reservas:gs.length};
+  gs.forEach(function(g){
+    g.personas.forEach(function(p){
+      if(p.estado==='baja') return;
+      t.personas++;
+      if(p.estado==='sin_cargo'){ t.brazos++; return; }
+      t.cobrar++; t.esperado+=p.monto;
+      if(p.estado==='pagado') t.pagados++;
+      else if(p.estado==='en_revision') t.revision++;
+      else t.pendientes++;
+    });
+    t.recaudado+=g.pagado;
+  });
+  t.compsRev=d.comprobantes.filter(function(c){return c.estado==='pendiente';}).length;
+  return t;
+}
+function stat(v,color,l,x){ return '<div class="astat"><div class="n" style="color:'+color+'">'+v+'</div><div class="l">'+l+'</div>'+(x?'<div class="x">'+x+'</div>':'')+'</div>'; }
+function renderStats(){
+  var t=totales(), r=EVENTOS[adminEv].reserva;
+  var pct=t.esperado?Math.round(t.recaudado/t.esperado*100):0;
+  $$('admin-stats').innerHTML=
+    stat(t.personas,'var(--ev)','Personas',r?(t.reservas+' reservas'+(t.brazos?' · '+t.brazos+' en brazos':'')):'')+
+    stat(t.cobrar,'var(--t)','Pasajes a cobrar',D().precio?ars(D().precio)+' c/u':'⚠ precio sin cargar')+
+    stat(t.pagados,'var(--g)','Pagados',t.cobrar?Math.round(t.pagados/t.cobrar*100)+'%':'')+
+    stat(t.compsRev,'var(--a)','Comprobantes por revisar',t.revision+' pasajes')+
+    stat(t.pendientes,'var(--r)','Sin pagar','incluye no validados')+
+    stat(ars(t.recaudado),'var(--g)','Recaudado',t.esperado?pct+'% de '+ars(t.esperado):'');
+  var b=$$('bdg-rev'); if(t.compsRev){ b.textContent=t.compsRev; b.style.display='inline-block'; } else b.style.display='none';
+  actualizarBadgeCamp();
+}
+
+function cambiarVista(v){
+  vista=v; cerrarMenus();
+  document.querySelectorAll('#vtabs .atab').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-v')===v); });
+  ['comprobantes','inscriptos','campanas','cuentas'].forEach(function(k){ $$('v-'+k).style.display=k===v?'block':'none'; });
+  if(!D()) return;
+  if(v==='comprobantes') renderComprobantes();
+  if(v==='inscriptos') renderInscriptos();
+  if(v==='campanas'){ renderCampanas(); previewCampana(); }
+  if(v==='cuentas') renderCuentas();
+}
+
+// ───── Comprobantes ─────
+function setCompFiltro(f){
+  compFiltro=f;
+  document.querySelectorAll('#comp-tabs .atab').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-f')===f); });
+  renderComprobantes();
+}
+function compsFiltrados(){
+  var cs=D().comprobantes.slice();
+  var cu=$$('comp-cuenta').value, me=$$('comp-medio').value, q=($$('comp-search').value||'').toLowerCase().trim();
+  if(compFiltro!=='todos') cs=cs.filter(function(c){return c.estado===compFiltro;});
+  if(cu) cs=cs.filter(function(c){return c.cuentaId===cu;});
+  if(me) cs=cs.filter(function(c){return (c.medio||'Transferencia')===me;});
+  if(q) cs=cs.filter(function(c){
+    var g=grupoPorId(c.grupoId);
+    return (g&&g.responsable.toLowerCase().includes(q)) || c.personas.some(function(p){return p.nombre.toLowerCase().includes(q)||String(p.dni).includes(q);});
+  });
+  if(compFiltro==='pendiente') cs.reverse(); // los más viejos primero para revisar en orden
+  return cs;
+}
+function renderComprobantes(){
+  if(!D()) return;
+  var cs=compsFiltrados(), el=$$('comp-list'), sm=$$('comp-summary');
+  if(cs.length){
+    var tot=cs.reduce(function(a,c){return a+c.monto;},0), pas=cs.reduce(function(a,c){return a+c.personas.length;},0);
+    sm.innerHTML='<span>'+cs.length+' comprobante'+(cs.length>1?'s':'')+' · '+pas+' pasaje'+(pas>1?'s':'')+' · <b>'+ars(tot)+'</b></span>';
+    sm.style.display='flex';
+  } else sm.style.display='none';
+  if(!cs.length){ el.innerHTML='<p style="text-align:center;color:var(--g4);padding:2rem;font-size:.85rem">'+(compFiltro==='pendiente'?'No hay comprobantes por revisar 🎉':'Sin resultados')+'</p>'; return; }
+  el.innerHTML=cs.map(compCard).join('');
+}
+function compCard(c){
+  var g=grupoPorId(c.grupoId)||{responsable:'(reserva no encontrada)',whatsapp:'',personas:[]};
+  var r=EVENTOS[adminEv].reserva;
+  var titulo = r ? 'Reserva de '+esc(g.responsable) : esc(g.responsable);
+  var hasUrl=/^https?:\/\//.test(c.url||'');
+  var ver = hasUrl ? '<a class="bver" href="'+esc(c.url)+'" target="_blank" rel="noopener">Ver comprobante</a>' : '<span style="font-size:.7rem;color:var(--g4)">'+esc(c.medio==='Efectivo'?'Efectivo':'Pago manual')+(c.recibidoPor?' · recibió '+esc(c.recibidoPor):'')+'</span>';
+  var acts='';
+  if(c.estado==='pendiente'){
+    acts = edicion() ? '<button class="bok" onclick="revisar(\''+c.id+'\',\'confirmado\')">✓ Confirmar</button><button class="bno" onclick="abrirRechazo(\''+c.id+'\')">✕</button>' : '<span class="estb c-en_revision">En revisión</span>';
+  } else if(c.estado==='confirmado'){
+    acts = '<span class="estb c-pagado">✓ Confirmado</span>'+btnWAComp(c,g,'confirmacion');
+  } else if(c.estado==='rechazado'){
+    acts = '<span class="estb c-rechazado">No validado</span>'+(edicion()?'<button class="bmut" onclick="revisar(\''+c.id+'\',\'pendiente\')">Revisar otra vez</button>':'')+btnWAComp(c,g,'rechazo');
+  }
+  var waLinea = c.whatsappEnviado==='si' ? '<span class="wa-sent">WA de '+(c.tipoWhatsapp==='rechazo'?'rechazo':'confirmación')+' enviado '+esc(c.fechaWhatsapp)+'</span>' : '';
+  var pend = g.cntPendientes ? ' · '+(g.cntPendientes===1?'le queda 1 pasaje':'le quedan '+g.cntPendientes+' pasajes')+' sin pagar' : (g.estado==='completo'?' · reserva completa':'');
+  return '<div class="comp '+c.estado+'" id="comp-'+c.id+'">'+
+    '<div class="comp-h"><div class="comp-i"><div class="comp-t">'+titulo+'</div>'+
+      '<div class="comp-s">'+esc(c.fecha)+' · '+esc(c.medio||'Transferencia')+(r?pend:'')+(c.estado==='rechazado'&&c.obs?' · Motivo: '+esc(c.obs):'')+'</div></div>'+
+      '<div class="comp-m"><div class="comp-mv">'+ars(c.monto)+'</div><div class="comp-ml">'+c.personas.length+' pasaje'+(c.personas.length>1?'s':'')+'</div></div></div>'+
+    (r||c.personas.length>1?'<div class="comp-p">'+c.personas.map(function(p){return '<span class="ppill">'+esc(p.nombre)+' <span>· '+esc(p.dni)+'</span></span>';}).join('')+'</div>':'<div class="comp-p"><span class="ppill"><span>DNI '+esc(c.personas[0].dni)+'</span></span></div>')+
+    '<div class="comp-f"><div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">'+acctPill(c.cuentaId)+
+      (g.cuentaId&&c.cuentaId!==g.cuentaId?'<span class="chip c-en_revision" title="La reserva tiene asignada otra cuenta">≠ asignada: '+esc((cuentaPorId(g.cuentaId)||{}).alias||g.cuentaId)+'</span>':'')+
+      (edicion()?'<button class="lnk" onclick="abrirCuentaComp(\''+c.id+'\')">Cambiar cuenta</button>':'')+waLinea+'</div><div class="comp-acts">'+ver+acts+'</div></div>'+
+  '</div>';
+}
+function btnWAComp(c,g,tipo){
+  if(!edicion()) return '';
+  if(!g.whatsapp) return '<span style="font-size:.7rem;color:var(--g4)">Sin WA</span>';
+  var msg = tipo==='confirmacion' ? msgConfirmacion(c,g) : msgRechazo(c,g);
+  var label = (c.whatsappEnviado==='si'&&c.tipoWhatsapp===tipo?'Reenviar':'Avisar')+' '+(tipo==='confirmacion'?'confirmación':'rechazo');
+  return '<a class="bwa" href="'+waUrl(g.whatsapp,msg)+'" target="whatsapp_tab" onclick="marcarAvisoComp(\''+c.id+'\',\''+tipo+'\')">'+label+'</a>';
+}
+async function revisar(id,estado,motivo){
+  if(!edicion()) return;
+  var c=D().comprobantes.find(function(x){return x.id===id;}); if(!c) return;
+  var card=$$('comp-'+id); if(card) card.style.opacity='.5';
+  try{
+    var d=await api('revisarComprobante',{comprobanteId:id,estado:estado,motivo:motivo||'',adminToken:adminToken});
+    if(!d.ok){ alert(d.error||'No se pudo actualizar.'); if(card) card.style.opacity=''; return; }
+    // Recalcula todo desde el servidor (estados de personas y reservas dependen del comprobante)
+    await cargarAdmin(true);
+  }catch(e){ alert('Error de conexión.'); if(card) card.style.opacity=''; }
+}
+function abrirRechazo(id){ modalCtx={comp:id}; $$('rech-motivo').value=''; $$('m-rech').style.display='flex'; setTimeout(function(){$$('rech-motivo').focus();},50); }
+function confirmarRechazo(){ cerrarModal('m-rech'); revisar(modalCtx.comp,'rechazado',$$('rech-motivo').value.trim()); }
+async function marcarAvisoComp(id,tipo){
+  var c=D().comprobantes.find(function(x){return x.id===id;});
+  if(c){ c.whatsappEnviado='si'; c.tipoWhatsapp=tipo; c.fechaWhatsapp=hoyTxt(); }
+  setTimeout(renderComprobantes,300);
+  try{ await api('marcarAvisoComp',{comprobanteId:id,tipo:tipo,adminToken:adminToken}); }catch(e){}
+}
+
+// ───── Mensajes WhatsApp ─────
+function waNum(n){ var s=String(n||'').replace(/\D/g,'').replace(/^0+/,''); if(s.length===10) s='549'+s; return s; }
+function waUrl(n,msg){ return 'https://wa.me/'+waNum(n)+'?text='+encodeURIComponent(msg); }
+function datosCuentaTxt(c){
+  if(!c) return '(cuenta a confirmar)';
+  return '• *Alias:* '+c.alias+'\n• *CBU/CVU:* '+c.cbu+'\n• *Titular:* '+c.titular+(c.banco?' ('+c.banco+')':'');
+}
+function personasPendientes(g){ return g.personas.filter(function(p){return p.estado==='sin_pago'||p.estado==='rechazado';}); }
+function totalPendiente(g){ return personasPendientes(g).reduce(function(a,p){return a+p.monto;},0); }
+function msgDatosPago(g){
+  var e=EVENTOS[adminEv], pend=personasPendientes(g), c=cuentaPorId(g.cuentaId);
+  var txt='Hola *'+g.saludo+'*! 👋 Te escribimos por el micro para la *'+e.nombre+'*'+(e.fecha?' ('+e.fecha+')':'')+'.\n\n';
+  if(e.reserva){
+    txt+='En tu reserva hay *'+pend.length+' pasaje'+(pend.length>1?'s':'')+'* para abonar'+(D().precio?': total *'+ars(totalPendiente(g))+'*':'')+'.\n';
+    if(g.brazos) txt+='(Los menores de 3 años que viajan en brazos no pagan.)\n';
+  } else {
+    txt+='Para confirmar tu lugar en el micro, el pasaje es de *'+ars(totalPendiente(g))+'*.\n';
+  }
+  txt+='\n📌 *Datos para transferir*\n'+datosCuentaTxt(c)+'\n\n⚠️ Transferí *solo a esta cuenta*: es la que tiene asignada '+(e.reserva?'tu reserva':'tu inscripción')+'.\n\n';
+  txt+='📎 *Después subí el comprobante acá:*\n'+portalLink(adminEv)+'\nEntrás con '+(e.reserva?'tu DNI (o el de cualquier persona de la reserva)':'tu DNI')+'.'+(e.reserva&&pend.length>1?' Si pagás todo junto, marcás a todos y subís un solo comprobante.':'');
+  return txt;
+}
+function msgRecordatorio(g){
+  var e=EVENTOS[adminEv], pend=personasPendientes(g), c=cuentaPorId(g.cuentaId);
+  return 'Hola '+g.saludo+', ¿cómo estás? Te recordamos que '+(e.reserva?'en tu reserva quedan *'+pend.length+' pasaje'+(pend.length>1?'s':'')+'* sin pagar':'todavía no registramos el pago de tu pasaje')+' para el micro a la *'+e.nombre+'*'+(D().precio?' (*'+ars(totalPendiente(g))+'*)':'')+'.\n\n'+datosCuentaTxt(c)+'\n\nCargá el comprobante en '+portalLink(adminEv);
+}
+function msgConfirmacion(c,g){
+  var e=EVENTOS[adminEv], quedan=personasPendientes(g).length;
+  var quien = e.reserva ? (c.personas.length===1?'el pasaje de *'+c.personas[0].nombre+'*':'*'+c.personas.length+' pasajes* ('+c.personas.map(function(p){return p.nombre;}).join(', ')+')') : 'tu pasaje';
+  var cierre = quedan ? '\n\nTodavía '+(quedan===1?'queda 1 pasaje':'quedan '+quedan+' pasajes')+' de la reserva sin pagar. Podés cargarlos en '+portalLink(adminEv) : (e.reserva?'\n\n¡Ya está paga toda la reserva! 🙌':' ¡Nos vemos en el micro! 🙌');
+  return 'Hola '+g.saludo+', confirmamos el pago de '+quien+' para el micro a la *'+e.nombre+'*, por *'+ars(c.monto)+'*. ✅'+cierre;
+}
+function msgRechazo(c,g){
+  var e=EVENTOS[adminEv];
+  return 'Hola '+g.saludo+'. No pudimos validar el comprobante que cargaste'+(e.reserva?' para '+c.personas.map(function(p){return p.nombre;}).join(', '):'')+' (micro a la '+e.nombre+')'+(c.obs?': '+c.obs:'')+'.\n\n¿Nos escribís para revisarlo? Si hace falta, podés volver a cargarlo en '+portalLink(adminEv);
+}
+
+// ───── Inscriptos / Reservas ─────
+function aplicaEstado(g,f){
+  if(!f) return true;
+  if(f==='deben') return g.cntPendientes>0;
+  return g.estado===f;
+}
+function textoBusca(g,q){
+  if(!q) return true;
+  if(g.responsable.toLowerCase().includes(q)) return true;
+  return g.personas.some(function(p){ return p.nombre.toLowerCase().includes(q)||String(p.dni).includes(q); });
+}
+function gruposFiltrados(pref){
+  var p=pref||'f';
+  var gs=D().grupos.slice();
+  var fe=$$(p+'-estado').value, fcu=$$(p+'-cuenta').value, fav=$$(p+'-aviso').value, fp=$$(p+'-par').value, fc=$$(p+'-com').value;
+  gs=gs.filter(function(g){
+    return aplicaEstado(g,fe) && (!fcu||g.cuentaId===fcu) && (!fav||(fav==='si'?!!g.fechaAviso:!g.fechaAviso)) && (!fp||g.parroquia===fp) && (!fc||g.comunidad===fc);
+  });
+  if(p==='f'){
+    var q=($$('f-search').value||'').toLowerCase().trim();
+    gs=gs.filter(function(g){return textoBusca(g,q);});
+    var ord=$$('f-ord').value;
+    if(ord==='nombre') gs.sort(function(a,b){return a.responsable.localeCompare(b.responsable);});
+    else if(ord==='deuda') gs.sort(function(a,b){return totalPendiente(b)-totalPendiente(a);});
+    else if(ord==='reciente') gs.sort(function(a,b){return b.orden-a.orden;});
+  }
+  return gs;
+}
+function renderInscriptos(){
+  if(!D()) return;
+  var r=EVENTOS[adminEv].reserva, gs=gruposFiltrados('f');
+  var pas=0, pend=0, deuda=0, pagados=0;
+  gs.forEach(function(g){ pas+=g.cntActivos; pagados+=g.cntPagados; pend+=g.cntPendientes; deuda+=totalPendiente(g); });
+  $$('ins-summary-text').innerHTML='<b>'+gs.length+'</b> '+(r?'reserva'+(gs.length===1?'':'s'):'inscripto'+(gs.length===1?'':'s'))+' · '+pas+' pasajes · '+pagados+' pagados · '+pend+' sin pagar · deben <b>'+ars(deuda)+'</b>';
+  $$('ins-thead').innerHTML='<tr><th>#</th><th>'+(r?'Responsable':'Nombre')+'</th><th>'+(r?'Personas':'DNI')+'</th><th>Parroquia</th><th>Com.</th><th>Cuenta</th><th style="text-align:right">A pagar</th><th style="text-align:right">Pagado</th><th>Estado</th><th>Aviso</th><th></th></tr>';
+  var tb=$$('ins-tbody');
+  if(!gs.length){ tb.innerHTML='<tr><td colspan="11" style="text-align:center;color:var(--g4);padding:1.5rem">Sin resultados</td></tr>'; return; }
+  var dup=D().duplicados||[];
+  tb.innerHTML=gs.map(function(g){
+    var open=!!abiertos[g.id];
+    var pers = r ? g.personas.filter(function(p){return !p.baja;}).length+(g.brazos?' <span class="sub">('+g.brazos+' brazos)</span>':'') : esc(g.personas[0].dni);
+    var tieneDup = g.personas.some(function(p){return dup.indexOf(p.dni)>=0;});
+    var row='<tr class="gr'+(open?' open':'')+'" onclick="toggleGrupo(\''+g.id+'\',event)">'+
+      '<td style="color:var(--s)">'+g.orden+'</td>'+
+      '<td><div class="nm">'+(r?(open?'▾ ':'▸ '):'')+esc(g.responsable)+(tieneDup?' <span class="chip c-en_revision" title="Hay un DNI repetido en otra reserva">DNI repetido</span>':'')+'</div><div class="sub">'+(g.whatsapp?'WA '+esc(g.whatsapp):'Sin WhatsApp')+'</div></td>'+
+      '<td>'+pers+'</td>'+
+      '<td style="font-size:.74rem">'+esc(g.parroquia)+'</td>'+
+      '<td>'+esc(g.comunidad)+'</td>'+
+      '<td>'+acctPill(g.cuentaId)+'</td>'+
+      '<td class="num">'+ars(g.aPagar)+'</td>'+
+      '<td class="num" style="color:var(--g);font-weight:700">'+ars(g.pagado)+'</td>'+
+      '<td><span class="chip c-'+g.estado+'">'+ELABEL[g.estado]+(r&&g.cntActivos>1&&g.estado!=='completo'&&g.estado!=='sin_cargo'?' '+g.cntPagados+'/'+g.cntActivos:'')+'</span></td>'+
+      '<td style="font-size:.68rem;color:#128C7E;font-weight:700;white-space:nowrap">'+(g.fechaAviso?'✓ '+esc(g.fechaAviso):'<span style="color:var(--g4);font-weight:400">—</span>')+'</td>'+
+      '<td onclick="event.stopPropagation()">'+menuGrupo(g)+'</td></tr>';
+    if(open) row+=detalleGrupo(g);
+    return row;
+  }).join('');
+}
+function toggleGrupo(id){ abiertos[id]=!abiertos[id]; renderInscriptos(); }
+function detalleGrupo(g){
+  var filas=g.personas.map(function(p){
+    var acc='';
+    if(edicion()){
+      acc = p.baja ? '<button class="lnk" onclick="reactivar(\''+p.dni+'\')">Reactivar</button>'
+                   : '<button class="lnk red" onclick="abrirBaja(\''+p.dni+'\')">Dar de baja</button>';
+    }
+    return '<tr><td style="font-weight:600">'+esc(p.nombre)+(p.baja&&p.notaBaja?'<div class="sub">'+esc(p.notaBaja)+'</div>':'')+'</td><td>'+esc(p.dni)+'</td>'+
+      '<td>'+(p.modalidad==='brazos'?'En brazos':'Asiento')+'</td>'+
+      '<td><span class="chip c-'+p.estado+'">'+ELABEL[p.estado]+'</span></td>'+
+      '<td class="num" style="text-align:right">'+(p.pagado?ars(p.pagado):'')+'</td><td style="text-align:right">'+acc+'</td></tr>';
+  }).join('');
+  return '<tr class="det"><td colspan="11"><table class="dtable">'+filas+'</table>'+
+    '<div class="sub" style="margin-top:.4rem">Inscripción: '+esc(g.fecha)+'</div></td></tr>';
+}
+function menuGrupo(g){
+  var items='';
+  var tienePend = g.cntPendientes>0;
+  if(g.whatsapp){
+    var pagoListo = D().precio>0 && !!cuentaPorId(g.cuentaId);
+    if(edicion()&&tienePend&&pagoListo) items+='<button class="menu-item" onclick="enviarWA(\''+g.id+'\',\'datos\')">💬 Enviar datos de pago</button>';
+    if(edicion()&&tienePend&&pagoListo&&g.fechaAviso) items+='<button class="menu-item" onclick="enviarWA(\''+g.id+'\',\'recordatorio\')">🔔 Recordar pago</button>';
+    items+='<button class="menu-item" onclick="enviarWA(\''+g.id+'\',\'libre\')">WhatsApp libre</button>';
+  }
+  if(edicion()){
+    if(items) items+='<div class="menu-sep"></div>';
+    if(tienePend||g.cntRevision) items+='<button class="menu-item" onclick="abrirPagoManual(\''+g.id+'\')">Registrar pago recibido</button>';
+    items+='<button class="menu-item" onclick="abrirCuenta(\''+g.id+'\')">Cambiar cuenta asignada</button>';
+    if(!EVENTOS[adminEv].reserva){
+      var p=g.personas[0];
+      items+= p.baja ? '<button class="menu-item" onclick="reactivar(\''+p.dni+'\')">Reactivar</button>' : '<button class="menu-item" style="color:var(--r)" onclick="abrirBaja(\''+p.dni+'\')">Dar de baja</button>';
+    }
+  }
+  if(!items) return '';
+  var mid='mn-'+g.id.replace(/[^a-zA-Z0-9]/g,'');
+  return '<div class="menu-wrap"><button class="menu-btn" onclick="toggleMenu(\''+mid+'\',this)">···</button><div class="menu-drop" id="'+mid+'">'+items+'</div></div>';
+}
+function toggleMenu(id,btn){
+  var m=$$(id); var ya=m.classList.contains('open'); cerrarMenus(); if(ya) return;
+  m.classList.add('open');
+  var r=btn.getBoundingClientRect();
+  m.style.right=(window.innerWidth-r.right)+'px'; m.style.left='auto'; m.style.top=(r.bottom+4)+'px';
+  if(r.bottom+m.offsetHeight+4>window.innerHeight) m.style.top=Math.max(4,r.top-m.offsetHeight-4)+'px';
+}
+function cerrarMenus(){ document.querySelectorAll('.menu-drop.open').forEach(function(m){m.classList.remove('open');}); }
+document.addEventListener('click',function(e){ if(!e.target.closest('.menu-wrap')) cerrarMenus(); });
+window.addEventListener('scroll',cerrarMenus,true);
+
+function abrirWATab(url){
+  try{ if(window._waTab && !window._waTab.closed){ window._waTab.location.href=url; window._waTab.focus(); return; } }catch(e){}
+  window._waTab=window.open(url,'whatsapp_tab');
+}
+async function enviarWA(id,tipo){
+  cerrarMenus();
+  var g=grupoPorId(id); if(!g||!g.whatsapp) return;
+  var msg = tipo==='datos'?msgDatosPago(g) : tipo==='recordatorio'?msgRecordatorio(g) : 'Hola '+g.saludo+', ';
+  abrirWATab(waUrl(g.whatsapp,msg));
+  if((tipo==='datos'||tipo==='recordatorio') && edicion()) await marcarAviso(id);
+}
+async function marcarAviso(id){
+  var g=grupoPorId(id); if(g){ g.fechaAviso=hoyTxt(); }
+  if(vista==='inscriptos') renderInscriptos();
+  try{ await api('marcarAviso',{evento:adminEv,grupoId:id,adminToken:adminToken}); }catch(e){}
+}
+function copiarResumen(){
+  var txt=evInfo(adminEv)+' — '+$$('ins-summary-text').textContent;
+  if(navigator.clipboard) navigator.clipboard.writeText(txt).catch(function(){prompt('Copiá:',txt);}); else prompt('Copiá:',txt);
+}
+
+// Bajas
+function abrirBaja(dni){ cerrarMenus(); modalCtx={dni:dni}; $$('mb-nota').value=''; $$('m-baja').style.display='flex'; }
+async function confirmarBaja(){ cerrarModal('m-baja'); await setBaja(modalCtx.dni,true,$$('mb-nota').value.trim()); }
+async function reactivar(dni){ cerrarMenus(); await setBaja(dni,false,''); }
+async function setBaja(dni,baja,nota){
+  try{
+    var d=await api('marcarBaja',{evento:adminEv,dni:dni,baja:baja?'true':'false',nota:nota,adminToken:adminToken});
+    if(!d.ok){ alert(d.error); return; }
+    await cargarAdmin(true);
+  }catch(e){ alert('Error de conexión.'); }
+}
+
+// Cambiar cuenta
+function abrirCuenta(id){
+  cerrarMenus();
+  var g=grupoPorId(id); modalCtx={grupo:id};
+  $$('m-cuenta').querySelector('h3').textContent='Cambiar cuenta asignada';
+  $$('mc-txt').textContent=(EVENTOS[adminEv].reserva?'Reserva de ':'')+g.responsable+'. Si ya le mandaste los datos de pago, avisale del cambio.';
+  $$('mc-sel').innerHTML=D().cuentas.map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===g.cuentaId?' selected':'')+'>'+esc(c.alias+' · '+c.titular)+'</option>';}).join('');
+  $$('m-cuenta').style.display='flex';
+}
+function abrirCuentaComp(id){
+  var c=D().comprobantes.find(function(x){return x.id===id;}); if(!c) return;
+  modalCtx={comp:id};
+  $$('m-cuenta').querySelector('h3').textContent='¿A qué cuenta llegó la plata?';
+  $$('mc-txt').textContent='Usalo cuando la persona transfirió a una cuenta distinta de la asignada. Solo cambia este comprobante; la reserva sigue con su cuenta.';
+  $$('mc-sel').innerHTML=D().cuentas.map(function(x){return '<option value="'+esc(x.id)+'"'+(x.id===c.cuentaId?' selected':'')+'>'+esc(x.alias+' · '+x.titular)+'</option>';}).join('');
+  $$('m-cuenta').style.display='flex';
+}
+async function confirmarCuenta(){
+  cerrarModal('m-cuenta');
+  try{
+    var d = modalCtx.comp
+      ? await api('cambiarCuentaComp',{comprobanteId:modalCtx.comp,cuentaId:$$('mc-sel').value,adminToken:adminToken})
+      : await api('cambiarCuenta',{evento:adminEv,grupoId:modalCtx.grupo,cuentaId:$$('mc-sel').value,adminToken:adminToken});
+    if(!d.ok){ alert(d.error); return; }
+    await cargarAdmin(true);
+  }catch(e){ alert('Error de conexión.'); }
+}
+
+// Pago manual
+function abrirPagoManual(id){
+  if(!edicion()) return;
+  cerrarMenus(); modalCtx={grupo:id||null};
+  $$('man-msg').style.display='none'; $$('man-dni').value=''; $$('man-recibido').value=''; $$('man-obs').value='';
+  $$('man-buscar-wrap').style.display=id?'none':'block';
+  $$('m-manual').style.display='flex';
+  if(id) manualMostrar(grupoPorId(id)); else { $$('man-grupo').innerHTML=''; $$('man-campos').style.display='none'; setTimeout(function(){$$('man-dni').focus();},50); }
+}
+function manualBuscar(){
+  var dni=$$('man-dni').value.replace(/\D/g,'');
+  var g=D().grupos.find(function(x){return x.personas.some(function(p){return p.dni===dni;});});
+  if(!g){ $$('man-grupo').innerHTML='<p style="color:var(--r);font-size:.8rem;margin-bottom:.6rem">No encontré a nadie con ese DNI en '+esc(EVENTOS[adminEv].corto)+'.</p>'; $$('man-campos').style.display='none'; return; }
+  modalCtx.grupo=g.id; manualMostrar(g);
+}
+function manualMostrar(g){
+  var pagables=g.personas.filter(function(p){return p.estado==='sin_pago'||p.estado==='rechazado'||p.estado==='en_revision';});
+  var h='<div class="ig"><label>'+(EVENTOS[adminEv].reserva?'Reserva de '+esc(g.responsable)+' — ¿qué pasajes se pagaron?':esc(g.responsable))+'</label>';
+  if(!pagables.length) h+='<p style="font-size:.8rem;color:var(--g)">No tiene pasajes pendientes.</p>';
+  h+=pagables.map(function(p){
+    return '<label class="prow pick'+(pagables.length===1?' sel':'')+'"><input type="checkbox" class="man-chk" value="'+esc(p.dni)+'"'+(pagables.length===1?' checked':'')+' onchange="this.closest(\'.prow\').classList.toggle(\'sel\',this.checked)"><div class="pi"><div class="pn">'+esc(p.nombre)+'</div><div class="pd">DNI '+esc(p.dni)+' · '+ars(p.monto)+(p.estado==='en_revision'?' · tiene comprobante en revisión':'')+'</div></div></label>';
+  }).join('')+'</div>';
+  $$('man-grupo').innerHTML=h;
+  $$('man-campos').style.display=pagables.length?'block':'none';
+}
+async function registrarManual(){
+  var msg=$$('man-msg');
+  if(!modalCtx.grupo){ showMsg(msg,'Buscá primero la reserva por DNI.',false); return; }
+  var dnis=Array.from(document.querySelectorAll('.man-chk:checked')).map(function(c){return c.value;});
+  if(!dnis.length){ showMsg(msg,'Marcá al menos una persona.',false); return; }
+  var medio=$$('man-medio').value, rec=$$('man-recibido').value.trim();
+  if(medio==='Efectivo'&&!rec){ showMsg(msg,'Indicá quién recibió el efectivo.',false); return; }
+  $$('man-btn').disabled=true;
+  try{
+    var d=await api('registrarPagoManual',{evento:adminEv,grupoId:modalCtx.grupo,dnis:dnis.join(','),medio:medio,recibidoPor:rec,obs:$$('man-obs').value.trim(),adminToken:adminToken});
+    $$('man-btn').disabled=false;
+    if(!d.ok){ showMsg(msg,d.error,false); return; }
+    cerrarModal('m-manual'); await cargarAdmin(true);
+  }catch(e){ $$('man-btn').disabled=false; showMsg(msg,'Error de conexión.',false); }
+}
+
+// ───── Cuentas ─────
+function renderCuentas(){
+  var d=D(), el=$$('acc-grid');
+  if(!d.cuentas.length){ el.innerHTML='<p style="color:var(--r);font-size:.85rem">No hay cuentas activas para este evento. Cargalas en la pestaña "Cuentas" de la planilla.</p>'; return; }
+  // Cada pasaje cuenta para la cuenta adonde llegó su pago (si ya pagó o está en revisión);
+  // si todavía no pagó, para la cuenta asignada a su reserva.
+  var cuentaPago={};
+  d.comprobantes.slice().reverse().forEach(function(cp){
+    if(cp.estado==='confirmado'||cp.estado==='pendiente') cp.personas.forEach(function(p){ cuentaPago[p.dni]=cp.cuentaId; });
+  });
+  el.innerHTML=d.cuentas.map(function(c){
+    var t={res:0,pas:0,esp:0,rec:0,rev:0,pend:0,ef:0};
+    d.grupos.forEach(function(g){
+      if(g.cuentaId===c.id) t.res++;
+      g.personas.forEach(function(p){
+        if(p.estado==='baja'||p.estado==='sin_cargo') return;
+        var cta = (p.estado==='pagado'||p.estado==='en_revision') && cuentaPago[p.dni] ? cuentaPago[p.dni] : g.cuentaId;
+        if(cta!==c.id) return;
+        t.pas++; t.esp+=p.monto;
+        if(p.estado==='pagado') t.rec+=p.pagado||p.monto;
+        else if(p.estado==='en_revision') t.rev+=p.monto;
+        else t.pend+=p.monto;
+      });
+    });
+    d.comprobantes.forEach(function(cp){ if(cp.cuentaId===c.id&&cp.estado==='confirmado'&&cp.medio==='Efectivo') t.ef+=cp.monto; });
+    var revComps=d.comprobantes.filter(function(cp){return cp.cuentaId===c.id&&cp.estado==='pendiente';}).length;
+    var pct=t.esp?Math.round(t.rec/t.esp*100):0;
+    return '<div class="acard" style="border-top-color:'+colorCuenta(c.id)+'">'+
+      '<h4>'+esc(c.titular)+'</h4><div class="al">'+esc(c.alias)+'<br>'+esc(c.cbu)+(c.banco?' · '+esc(c.banco):'')+'</div>'+
+      '<div style="margin-top:.5rem;display:flex;flex-wrap:wrap;gap:.25rem">'+((c.reparto&&c.reparto.length)?c.reparto.map(function(r){return '<span class="chip c-sin_pago">'+esc(r)+'</span>';}).join(''):'<span style="font-size:.7rem;color:var(--g4)">Sin comunidades fijas · reparto automático</span>')+'</div>'+
+      '<div class="big" style="color:var(--g)">'+ars(t.rec)+'</div>'+
+      '<div class="pbar"><div style="width:'+pct+'%;background:var(--g)"></div><div style="width:'+(t.esp?Math.round(t.rev/t.esp*100):0)+'%;background:var(--a)"></div></div>'+
+      '<div style="font-size:.7rem;color:var(--s);margin-bottom:.5rem">'+pct+'% de '+ars(t.esp)+'</div>'+
+      '<div class="kv"><span>'+(EVENTOS[adminEv].reserva?'Reservas':'Inscriptos')+'</span><b>'+t.res+'</b></div>'+
+      '<div class="kv"><span>Pasajes a cobrar</span><b>'+t.pas+'</b></div>'+
+      '<div class="kv"><span>En revisión</span><b style="color:var(--a)">'+ars(t.rev)+'</b></div>'+
+      '<div class="kv"><span>Falta cobrar</span><b style="color:var(--r)">'+ars(t.pend)+'</b></div>'+
+      (t.ef?'<div class="kv"><span>De eso, en efectivo</span><b>'+ars(t.ef)+'</b></div>':'')+
+      '<div class="acts"><button class="bs bsm" onclick="verCompsCuenta(\''+c.id+'\')">Comprobantes'+(revComps?' ('+revComps+' por revisar)':'')+'</button>'+
+      '<button class="bs bsm" onclick="verInsCuenta(\''+c.id+'\')">'+(EVENTOS[adminEv].reserva?'Reservas':'Inscriptos')+'</button></div></div>';
+  }).join('');
+}
+function verCompsCuenta(id){ $$('comp-cuenta').value=id; setCompFiltro('pendiente'); cambiarVista('comprobantes'); }
+function verInsCuenta(id){ $$('f-cuenta').value=id; cambiarVista('inscriptos'); }
+
+// ───── Campañas (se guardan en este navegador) ─────
+function campKey(){ return 'micros_papa_campanas_'+adminEv; }
+function cargarCamps(){ try{ var a=JSON.parse(localStorage.getItem(campKey())||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
+function guardarCamps(a){ try{ localStorage.setItem(campKey(),JSON.stringify(a)); }catch(e){ alert('No se pudo guardar la campaña en este navegador.'); } }
+function actualizarBadgeCamp(){
+  var n=cargarCamps().filter(function(c){return c.estado==='activa';}).reduce(function(a,c){return a+c.destinatarios.filter(function(d){return !d.enviado;}).length;},0);
+  var b=$$('bdg-camp'); if(n){ b.textContent=n; b.style.display='inline-block'; } else b.style.display='none';
+}
+function destinatariosValidos(gs){ return gs.filter(function(g){ return g.whatsapp && g.personas.some(function(p){return !p.baja;}); }); }
+function previewCampana(){
+  if(!D()) return;
+  var gs=destinatariosValidos(gruposFiltrados('c'));
+  $$('camp-preview').textContent=gs.length+' '+(EVENTOS[adminEv].reserva?'reserva':'persona')+(gs.length===1?'':'s')+' con WhatsApp para este filtro.';
+}
+var _campCache=[];
+var PLANTILLAS={
+  datos:'Hola *{nombre}*! 👋 Te escribimos por el micro para la *{evento}*.\n\n{detalle}: total *{total}*.\n\n📌 *Datos para transferir*\n• *Alias:* {alias}\n• *CBU/CVU:* {cbu}\n• *Titular:* {titular}\n\n⚠️ Transferí *solo a esta cuenta*.\n\n📎 Después subí el comprobante en:\n{portal}\nEntrás con tu DNI.',
+  recordatorio:'Hola {nombre}, te recordamos que {detalle} para el micro a la *{evento}* (*{total}*).\n\n• *Alias:* {alias}\n• *CBU/CVU:* {cbu}\n• *Titular:* {titular}\n\nCargá el comprobante en {portal}',
+  libre:'Hola {nombre}, '
+};
+function aplicarPlantilla(){ $$('nc-msg').value=PLANTILLAS[$$('nc-plantilla').value]; }
+function abrirNuevaCampana(origen){
+  if(!edicion()){ alert('Esta acción requiere la clave de edición.'); return; }
+  _campCache=destinatariosValidos(gruposFiltrados(origen==='ins'?'f':'c'));
+  if(!_campCache.length){ alert('No hay destinatarios con WhatsApp para ese filtro.'); return; }
+  if(!(D().precio>0) || !D().cuentas.length) alert('Ojo: este evento todavía no tiene precio o cuentas cargadas. Usá un mensaje libre, sin {total} ni datos de la cuenta.');
+  $$('nc-count').textContent=_campCache.length+' destinatario'+(_campCache.length>1?'s':'')+' · '+evInfo(adminEv)+'. Cada mensaje sale con los datos de la cuenta asignada a esa reserva.';
+  $$('nc-nombre').value=''; $$('nc-plantilla').value='datos'; aplicarPlantilla();
+  $$('nc-ph').innerHTML=['{nombre}','{total}','{pasajes}','{detalle}','{alias}','{cbu}','{titular}','{evento}','{portal}'].map(function(p){return '<button type="button" onclick="insertarPh(\''+p+'\')">'+p+'</button>';}).join('');
+  $$('m-camp').style.display='flex'; setTimeout(function(){$$('nc-nombre').focus();},50);
+}
+function insertarPh(p){ var t=$$('nc-msg'), s=t.selectionStart||t.value.length; t.value=t.value.slice(0,s)+p+t.value.slice(t.selectionEnd||s); t.focus(); t.selectionStart=t.selectionEnd=s+p.length; }
+function crearCampana(){
+  var nombre=$$('nc-nombre').value.trim(), msg=$$('nc-msg').value.trim();
+  if(!nombre){ alert('Poné un nombre a la campaña.'); return; }
+  if(!msg){ alert('Escribí el mensaje.'); return; }
+  var camp={id:'c'+Date.now(),nombre:nombre,mensaje:msg,marcarAviso:$$('nc-marcar').checked,fechaCreacion:hoyTxt(),estado:'activa',
+    destinatarios:_campCache.map(function(g){return {grupoId:g.id,nombre:g.responsable,whatsapp:g.whatsapp,enviado:false,fechaEnvio:''};})};
+  var a=cargarCamps(); a.push(camp); guardarCamps(a);
+  cerrarModal('m-camp'); cambiarVista('campanas'); abrirCampana(camp.id);
+}
+function armarMsgCamp(tpl,g){
+  var e=EVENTOS[adminEv], pend=personasPendientes(g), c=cuentaPorId(g.cuentaId)||{};
+  var detalle = e.reserva ? 'En tu reserva hay *'+pend.length+' pasaje'+(pend.length===1?'':'s')+'* para abonar' : 'Para confirmar tu lugar, el pasaje';
+  if(tpl===PLANTILLAS.recordatorio || /te recordamos que \{detalle\}/.test(tpl)) detalle = e.reserva ? 'en tu reserva quedan *'+pend.length+' pasaje'+(pend.length===1?'':'s')+'* sin pagar' : 'todavía no registramos el pago de tu pasaje';
+  return tpl.replace(/\{nombre\}/g,g.saludo).replace(/\{total\}/g,ars(totalPendiente(g))).replace(/\{pasajes\}/g,String(pend.length))
+    .replace(/\{detalle\}/g,detalle).replace(/\{alias\}/g,c.alias||'').replace(/\{cbu\}/g,c.cbu||'').replace(/\{titular\}/g,c.titular||'')
+    .replace(/\{evento\}/g,e.nombre).replace(/\{portal\}/g,portalLink(adminEv));
+}
+function renderCampanas(){
+  actualizarBadgeCamp();
+  var cs=cargarCamps(), act=cs.filter(function(c){return c.estado==='activa';}), arch=cs.filter(function(c){return c.estado==='archivada';});
+  $$('camp-listas').style.display='block'; $$('camp-detalle').style.display='none';
+  var card=function(c){
+    var tot=c.destinatarios.length, env=c.destinatarios.filter(function(d){return d.enviado;}).length;
+    return '<div class="camp-card '+c.estado+'" onclick="abrirCampana(\''+c.id+'\')"><div class="camp-info"><div class="camp-nombre">'+esc(c.nombre)+'</div>'+
+      '<div class="camp-meta">Creada '+esc(c.fechaCreacion)+' · '+tot+' destinatarios</div></div>'+
+      '<div class="camp-prog"><div class="camp-bar"><div style="width:'+Math.round(env/tot*100)+'%"></div></div><div class="camp-ptxt">'+env+'/'+tot+' enviados</div></div></div>';
+  };
+  $$('camp-activas').innerHTML=act.length?act.map(card).join(''):'<p style="font-size:.82rem;color:var(--g4);padding:.4rem 0">No hay campañas activas. Elegí un filtro arriba y creá una.</p>';
+  $$('camp-arch-wrap').style.display=arch.length?'block':'none';
+  $$('camp-archivadas').innerHTML=arch.map(card).join('');
+}
+function toggleArch(){ var el=$$('camp-archivadas'), o=el.style.display==='none'; el.style.display=o?'flex':'none'; $$('camp-arch-t').textContent=o?'▼':'▶'; }
+function abrirCampana(id){
+  var c=cargarCamps().find(function(x){return x.id===id;}); if(!c) return;
+  $$('camp-listas').style.display='none'; var el=$$('camp-detalle'); el.style.display='block';
+  var tot=c.destinatarios.length, env=c.destinatarios.filter(function(d){return d.enviado;}).length;
+  var ds=c.destinatarios.slice().sort(function(a,b){return (a.enviado?1:0)-(b.enviado?1:0);});
+  var h='<div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.7rem;flex-wrap:wrap"><button class="bs bsm" onclick="renderCampanas()">← Volver</button>'+
+    '<b>'+esc(c.nombre)+'</b><span style="font-size:.78rem;color:var(--s)">'+env+'/'+tot+' enviados</span></div>'+
+    '<div style="background:var(--g2);border-radius:var(--rs);padding:.75rem 1rem;margin-bottom:.75rem;font-size:.8rem;color:var(--s);white-space:pre-wrap">'+esc(c.mensaje)+'</div>';
+  h+=ds.map(function(d){
+    var g=grupoPorId(d.grupoId);
+    var btn='';
+    if(edicion()&&!d.enviado&&g) btn='<a class="bwa" href="'+waUrl(d.whatsapp,armarMsgCamp(c.mensaje,g))+'" target="whatsapp_tab" onclick="marcarDest(\''+c.id+'\',\''+d.grupoId+'\',true)">Enviar WA</a>';
+    var estadoNow = g ? '<span class="chip c-'+g.estado+'">'+ELABEL[g.estado]+'</span>' : '<span class="chip c-baja">ya no está</span>';
+    return '<div class="camp-dest'+(d.enviado?' enviado':'')+'"><div class="camp-info"><div class="camp-nombre">'+esc(d.nombre)+'</div><div class="camp-meta">WA '+esc(d.whatsapp)+(g?' · '+acctPill(g.cuentaId):'')+'</div></div>'+
+      estadoNow+(d.enviado?'<span class="chip c-pagado">Enviado '+esc(d.fechaEnvio)+'</span>':'')+btn+
+      (edicion()?'<button class="bmut" onclick="marcarDest(\''+c.id+'\',\''+d.grupoId+'\',false)">'+(d.enviado?'Desmarcar':'Marcar enviado')+'</button>':'')+'</div>';
+  }).join('');
+  if(edicion()) h+='<div style="margin-top:.6rem;display:flex;gap:.4rem">'+(c.estado==='activa'?'<button class="bs bsm" onclick="archivarCamp(\''+c.id+'\')">Archivar</button>':'')+'<button class="bgr" style="padding:5px 12px;font-size:.76rem" onclick="eliminarCamp(\''+c.id+'\')">Eliminar campaña</button></div>';
+  el.innerHTML=h;
+}
+function marcarDest(cid,gid,desdeWA){
+  var a=cargarCamps(), c=a.find(function(x){return x.id===cid;}); if(!c) return;
+  var d=c.destinatarios.find(function(x){return x.grupoId===gid;}); if(!d) return;
+  d.enviado = desdeWA ? true : !d.enviado;
+  d.fechaEnvio = d.enviado ? hoyTxt() : '';
+  if(c.destinatarios.every(function(x){return x.enviado;})) c.estado='archivada';
+  guardarCamps(a);
+  if(d.enviado && c.marcarAviso) marcarAviso(gid);
+  setTimeout(function(){ abrirCampana(cid); actualizarBadgeCamp(); },250);
+}
+function archivarCamp(id){ var a=cargarCamps(), c=a.find(function(x){return x.id===id;}); if(c){ c.estado='archivada'; guardarCamps(a); } renderCampanas(); }
+function eliminarCamp(id){ if(!confirm('¿Eliminar esta campaña?')) return; guardarCamps(cargarCamps().filter(function(x){return x.id!==id;})); renderCampanas(); }
+
+// ───── Exportar ─────
+function exportarCSV(){
+  if(!D()) return;
+  var r=EVENTOS[adminEv].reserva;
+  var gs = vista==='inscriptos' ? gruposFiltrados('f') : D().grupos;
+  var rows=[['Evento','N° reserva','Responsable','WhatsApp','Parroquia','Comunidad','Cuenta','Pasajero','DNI','Modalidad','Estado','Monto','Pagado','Aviso de pago']];
+  gs.forEach(function(g){
+    var c=cuentaPorId(g.cuentaId);
+    g.personas.forEach(function(p){
+      rows.push([EVENTOS[adminEv].nombre,g.orden,g.responsable,g.whatsapp,g.parroquia,g.comunidad,c?c.alias:'',p.nombre,p.dni,p.modalidad==='brazos'?'En brazos':'Asiento',ELABEL[p.estado],p.monto,p.pagado,g.fechaAviso||'']);
+    });
+  });
+  var csv=rows.map(function(rw){return rw.map(function(v){ v=String(v==null?'':v); return /[",;\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }).join(';');}).join('\n');
+  var blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='micros-'+adminEv+'-'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
+}
+
+// ════════════════════════════ INICIO ════════════════════════════
+document.addEventListener('DOMContentLoaded',function(){
+  $$('h-misa-n').textContent=EVENTOS.misa.nombre; $$('h-misa-d').textContent=EVENTOS.misa.fecha||'Micro';
+  $$('h-jov-n').textContent=EVENTOS.jovenes.nombre; $$('h-jov-d').textContent=EVENTOS.jovenes.fecha||'Micro';
+  $$('dni-input').addEventListener('keydown',function(e){ if(e.key==='Enter') buscarGrupo(); });
+  $$('admin-pass').addEventListener('keydown',function(e){ if(e.key==='Enter') verificarAdmin(); });
+  $$('man-dni').addEventListener('keydown',function(e){ if(e.key==='Enter') manualBuscar(); });
+  if(DEMO){ var b=document.createElement('div'); b.className='demo-banner'; b.textContent='MODO DEMO · datos inventados · clave admin: demo'; document.body.appendChild(b); }
+  var qe=new URLSearchParams(location.search).get('e');
+  if(qe && EVENTOS[qe]) elegirEvento(qe);
+});
+
+// ════════════════════════════ MODO DEMO ════════════════════════════
+// Simula el Apps Script con datos inventados, para probar la app sin backend.
+var Mock = (function(){
+  if(!DEMO) return null;
+  var seed=7; function rnd(){ seed=(seed*16807)%2147483647; return (seed-1)/2147483646; }
+  function pick(a){ return a[Math.floor(rnd()*a.length)]; }
+  var NOM=['Juan','María','Lucía','Pedro','Sofía','Tomás','Ana','Mateo','Clara','José','Inés','Pablo','Rocío','Martín','Belén','Joaquín','Paula','Santiago','Julia','Ignacio'];
+  var APE=['García','Fernández','López','Martínez','Romero','Sosa','Álvarez','Torres','Ruiz','Díaz','Acosta','Benítez','Medina','Herrera','Suárez','Molina'];
+  var COM=['1ª','2ª','3ª','4ª','5ª','6ª','7ª'];
+  var precios={misa:18000,jovenes:22000};
+  var cuentas=[
+    {id:'C1',alias:'micros.papa.uno',cbu:'0000003100011122233301',titular:'Cuenta Uno (demo)',banco:'Mercado Pago'},
+    {id:'C2',alias:'micros.papa.dos',cbu:'0110599520000011122233',titular:'Cuenta Dos (demo)',banco:'Banco Nación'},
+    {id:'C3',alias:'micros.papa.tres',cbu:'0140999801200011122233',titular:'Cuenta Tres (demo)',banco:'Banco Provincia'}
+  ];
+  var dniN=30000000;
+  function nuevoDni(){ dniN+=Math.floor(rnd()*900000)+10000; return String(dniN); }
+  var base={misa:[],jovenes:[]};
+  for(var i=0;i<22;i++){
+    var ape=pick(APE), n=1+Math.floor(rnd()*5), ps=[];
+    for(var k=0;k<n;k++) ps.push({dni:nuevoDni(),nombre:ape+' '+pick(NOM),modalidad:(k>=2&&rnd()<.2)?'brazos':'asiento'});
+    var resp=ps[0].nombre.split(' ').slice(1).join(' ')+' '+ape;
+    base.misa.push({id:'M-'+(1000+i),orden:i+1,fecha:(10+Math.floor(i/6))+'/10/2026 2'+(i%4)+':0'+(i%10),responsable:resp,saludo:resp.split(' ')[0],whatsapp:'54922'+(10000000+Math.floor(rnd()*8999999)),parroquia:'San Juan Bosco (La Plata)',comunidad:pick(COM),personas:ps});
+  }
+  for(var j=0;j<26;j++){
+    var nm=pick(NOM), ap=pick(APE), d=String(44000000+Math.floor(rnd()*4000000));
+    base.jovenes.push({id:'J-'+d,orden:j+1,fecha:'15/10/2026',responsable:ap+' '+nm,saludo:nm,whatsapp:'54922'+(10000000+Math.floor(rnd()*8999999)),parroquia:pick(['San Juan Bosco (La Plata)','Nuestra Señora de Luján']),comunidad:pick(COM),personas:[{dni:d,nombre:ap+' '+nm,modalidad:'asiento'}]});
+  }
+  var pagos=[], asign={misa:{},jovenes:{}}, estados={misa:{},jovenes:{}}, cid=0;
+  function addPago(ev,g,ps,estado,medio){
+    cid++; ps.forEach(function(p){ pagos.push({Evento:ev,GrupoID:g.id,ComprobanteID:'C'+cid,DNI:p.dni,Nombre:p.nombre,Monto:p.modalidad==='brazos'?0:precios[ev],CuentaID:asign[ev][g.id],ComprobanteURL:medio==='Efectivo'?'':'https://res.cloudinary.com/demo/image/upload/sample.jpg',Estado:estado,Medio:medio||'Transferencia',RecibidoPor:medio==='Efectivo'?'Vicky':'',Observacion:estado==='rechazado'?'No se ve el monto':'',Fecha:'1'+(6+(cid%3))+'/10/2026 1'+(cid%10)+':2'+(cid%6),WhatsappEnviado:'',FechaWhatsapp:'',TipoWhatsapp:''}); });
+  }
+  function armar(ev){
+    var grupos=JSON.parse(JSON.stringify(base[ev])), pr=precios[ev];
+    var carga={}; cuentas.forEach(function(c){carga[c.id]=0;});
+    grupos.forEach(function(g){ var a=asign[ev][g.id]; if(a) carga[a]+=g.personas.filter(function(p){return p.modalidad==='asiento';}).length; });
+    grupos.forEach(function(g){ if(asign[ev][g.id]) return; var m=cuentas[0].id; cuentas.forEach(function(c){ if(carga[c.id]<carga[m]) m=c.id; }); asign[ev][g.id]=m; carga[m]+=g.personas.filter(function(p){return p.modalidad==='asiento';}).length; });
+    var ps=pagos.filter(function(p){return p.Evento===ev;});
+    grupos.forEach(function(g){
+      g.cuentaId=asign[ev][g.id]; g.fechaAviso=(estados[ev][g.id]||{}).FechaAviso||'';
+      g.personas.forEach(function(p){
+        var e=estados[ev][p.dni]||{}; p.baja=e.Baja==='SI'; p.notaBaja=e.Nota||''; p.monto=p.modalidad==='brazos'?0:pr;
+        var mine=ps.filter(function(x){return x.DNI===p.dni;});
+        var has=function(s){return mine.some(function(x){return x.Estado===s;});};
+        p.pagado=mine.filter(function(x){return x.Estado==='confirmado';}).reduce(function(a,x){return a+x.Monto;},0);
+        p.estado=p.baja?'baja':p.modalidad==='brazos'?'sin_cargo':has('confirmado')?'pagado':has('pendiente')?'en_revision':has('rechazado')?'rechazado':'sin_pago';
+        var rr=mine.filter(function(x){return x.Estado==='rechazado';}).pop(); p.motivo=p.estado==='rechazado'&&rr?rr.Observacion:'';
+      });
+      var act=g.personas.filter(function(p){return p.estado!=='baja'&&p.estado!=='sin_cargo';});
+      g.asientos=g.personas.filter(function(p){return p.modalidad==='asiento'&&!p.baja;}).length;
+      g.brazos=g.personas.filter(function(p){return p.modalidad==='brazos'&&!p.baja;}).length;
+      g.aPagar=act.reduce(function(a,p){return a+p.monto;},0);
+      g.pagado=g.personas.reduce(function(a,p){return a+p.pagado;},0);
+      g.cntPagados=act.filter(function(p){return p.estado==='pagado';}).length;
+      g.cntRevision=act.filter(function(p){return p.estado==='en_revision';}).length;
+      g.cntPendientes=act.filter(function(p){return p.estado==='sin_pago'||p.estado==='rechazado';}).length;
+      g.cntActivos=act.length;
+      g.estado=!act.length?'sin_cargo':g.cntPagados===act.length?'completo':g.cntRevision?'en_revision':act.some(function(p){return p.estado==='rechazado';})?'rechazado':g.cntPagados?'parcial':'sin_pagos';
+    });
+    return {grupos:grupos,pagos:ps,precio:pr};
+  }
+  // Pagos de ejemplo
+  ['misa','jovenes'].forEach(function(ev){
+    armar(ev);
+    base[ev].forEach(function(g,i){
+      var ps=g.personas.filter(function(p){return p.modalidad==='asiento';});
+      if(i%5===0) addPago(ev,g,ps,'confirmado');
+      else if(i%5===1) addPago(ev,g,ps.slice(0,Math.max(1,ps.length-1)),'pendiente');
+      else if(i%7===2) addPago(ev,g,ps.slice(0,1),'rechazado');
+      else if(i%9===3) addPago(ev,g,ps,'confirmado','Efectivo');
+      if(i%4===0) estados[ev][g.id]={FechaAviso:'14/10/2026'};
+    });
+  });
+  function buscar(gs,dni){ return gs.find(function(g){return g.personas.some(function(p){return p.dni===dni;});}); }
+  function clone(x){ return JSON.parse(JSON.stringify(x)); }
+  function handle(q){
+    return new Promise(function(res){ setTimeout(function(){ res(clone(run(q))); }, 250); });
+  }
+  function run(q){
+    var ev=q.evento, a=q.action;
+    if(a==='loginAdmin') return q.adminPass==='demo'?{ok:true,token:'demo',role:'edit'}:q.adminPass==='ver'?{ok:true,token:'demo',role:'view'}:{ok:false,error:'Contraseña incorrecta. En la demo es "demo" (o "ver" para solo lectura).'};
+    if(a==='getGrupo'){
+      var d=armar(ev), g=buscar(d.grupos,String(q.dni).replace(/\D/g,''));
+      if(!g) return {ok:false,error:ev==='misa'?'No encontramos una reserva con ese DNI. (Demo: probá con '+base.misa[2].personas[0].dni+')':'No encontramos una inscripción con ese DNI. (Demo: probá con '+base.jovenes[2].personas[0].dni+')'};
+      var c=cuentas.find(function(x){return x.id===g.cuentaId;});
+      return {ok:true,evento:ev,precio:d.precio,grupo:g,cuenta:c};
+    }
+    if(a==='registrarPago'){
+      var d2=armar(ev), g2=buscar(d2.grupos,q.dni);
+      var sel=q.dnis.split(','), ps=g2.personas.filter(function(p){return sel.indexOf(p.dni)>=0;});
+      if(ps.some(function(p){return p.estado!=='sin_pago'&&p.estado!=='rechazado';})) return {ok:false,error:'Alguna persona ya tiene comprobante.'};
+      addPago(ev,base[ev].find(function(x){return x.id===g2.id;}),ps,'pendiente'); return {ok:true};
+    }
+    if(a==='getAdmin'){
+      var d3=armar(ev), comps={}, lista=[];
+      d3.pagos.forEach(function(p){
+        var c=comps[p.ComprobanteID]; if(!c){ c=comps[p.ComprobanteID]={id:p.ComprobanteID,fecha:p.Fecha,grupoId:p.GrupoID,cuentaId:p.CuentaID,url:p.ComprobanteURL,estado:p.Estado,medio:p.Medio,recibidoPor:p.RecibidoPor,obs:p.Observacion,whatsappEnviado:p.WhatsappEnviado,fechaWhatsapp:p.FechaWhatsapp,tipoWhatsapp:p.TipoWhatsapp,monto:0,personas:[]}; lista.push(c); }
+        c.monto+=p.Monto; c.personas.push({dni:p.DNI,nombre:p.Nombre});
+      });
+      return {ok:true,role:'edit',evento:ev,precio:d3.precio,cuentas:cuentas,grupos:d3.grupos,comprobantes:lista.reverse(),duplicados:[]};
+    }
+    if(a==='revisarComprobante'){ pagos.forEach(function(p){ if(p.ComprobanteID===q.comprobanteId){ p.Estado=q.estado; p.WhatsappEnviado=''; if(q.estado==='rechazado') p.Observacion=q.motivo; } }); return {ok:true}; }
+    if(a==='registrarPagoManual'){ var g4=base[ev].find(function(x){return x.id===q.grupoId;}); var sel4=q.dnis.split(','); addPago(ev,g4,g4.personas.filter(function(p){return sel4.indexOf(p.dni)>=0;}),'confirmado',q.medio); var last=pagos.slice(-sel4.length); last.forEach(function(p){p.RecibidoPor=q.recibidoPor;p.ComprobanteURL='';}); return {ok:true}; }
+    if(a==='cambiarCuenta'){ asign[ev][q.grupoId]=q.cuentaId; return {ok:true}; }
+    if(a==='marcarBaja'){ estados[ev][q.dni]={Baja:q.baja==='true'?'SI':'NO',Nota:q.nota}; return {ok:true}; }
+    if(a==='marcarAviso'){ estados[ev][q.grupoId]=Object.assign(estados[ev][q.grupoId]||{},{FechaAviso:new Date().toLocaleDateString('es-AR')}); return {ok:true}; }
+    if(a==='marcarAvisoComp'){ pagos.forEach(function(p){ if(p.ComprobanteID===q.comprobanteId){ p.WhatsappEnviado='si'; p.TipoWhatsapp=q.tipo; p.FechaWhatsapp=new Date().toLocaleDateString('es-AR'); } }); return {ok:true}; }
+    return {ok:false,error:'Acción desconocida'};
+  }
+  return {handle:handle, base:base};
+})();
+</script>
+</body>
+</html>
